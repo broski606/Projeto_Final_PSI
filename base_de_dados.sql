@@ -1,65 +1,88 @@
-CREATE TABLE Categorias (
-    id_categoria INT AUTO_INCREMENT PRIMARY KEY,
-    nome VARCHAR(100) NOT NULL,
-    descricao TEXT
+DROP DATABASE IF EXISTS "Columbofilia-Armazem";
+CREATE DATABASE "Columbofilia-Armazem";
+USE "Columbofilia-Armazem";
+CREATE TABLE tipos_produto (
+    id          INT AUTO_INCREMENT PRIMARY KEY,
+    nome        VARCHAR(50) NOT NULL,
+    descricao   TEXT
 );
 
-CREATE TABLE Fornecedores (
-    id_fornecedor INT AUTO_INCREMENT PRIMARY KEY,
-    nome VARCHAR(100) NOT NULL,
-    contato VARCHAR(255),
-    endereco TEXT,
-    telefone VARCHAR(20),
-    email VARCHAR(100)
+CREATE TABLE tipos_movimentacao (
+    id          INT AUTO_INCREMENT PRIMARY KEY,
+    nome        VARCHAR(50) NOT NULL,
+    descricao   TEXT
 );
 
-CREATE TABLE Produtos (
-    id_produto INT AUTO_INCREMENT PRIMARY KEY,
-    nome VARCHAR(100) NOT NULL,
-    descricao TEXT,
-    preco DECIMAL(10, 2) NOT NULL,
-    tipo ENUM('drone', 'peca') NOT NULL,
-    estoque INT NOT NULL DEFAULT 0,
-    id_categoria INT,
-    id_fornecedor INT,
-    FOREIGN KEY (id_categoria) REFERENCES Categorias(id_categoria) ON DELETE SET NULL,
-    FOREIGN KEY (id_fornecedor) REFERENCES Fornecedores(id_fornecedor) ON DELETE SET NULL
+CREATE TABLE status_movimentacao (
+    id          INT AUTO_INCREMENT PRIMARY KEY,
+    nome        VARCHAR(50) NOT NULL,
+    descricao   TEXT
 );
 
-CREATE TABLE Compatibilidade (
-    id_compatibilidade INT AUTO_INCREMENT PRIMARY KEY,
-    id_peca INT NOT NULL,
-    id_drone INT NOT NULL,
-    FOREIGN KEY (id_peca) REFERENCES Produtos(id_produto) ON DELETE CASCADE,
-    FOREIGN KEY (id_drone) REFERENCES Produtos(id_produto) ON DELETE CASCADE,
-    UNIQUE KEY (id_peca, id_drone)
+CREATE TABLE categorias (
+    id          INT AUTO_INCREMENT PRIMARY KEY,
+    nome        VARCHAR(100) NOT NULL,
+    descricao   TEXT
 );
 
-CREATE TABLE Clientes (
-    id_cliente INT AUTO_INCREMENT PRIMARY KEY,
-    nome VARCHAR(100) NOT NULL,
-    email VARCHAR(100) UNIQUE NOT NULL,
-    telefone VARCHAR(20),
-    endereco TEXT,
-    data_cadastro DATE DEFAULT CURRENT_DATE
+CREATE TABLE fornecedores (
+    id          INT AUTO_INCREMENT PRIMARY KEY,
+    nome        VARCHAR(100) NOT NULL,
+    contato     VARCHAR(255),
+    endereco    TEXT,
+    telefone    VARCHAR(20),
+    email       VARCHAR(100)
 );
 
-CREATE TABLE Pedidos (
-    id_pedido INT AUTO_INCREMENT PRIMARY KEY,
-    id_cliente INT NOT NULL,
-    data_pedido DATETIME DEFAULT CURRENT_TIMESTAMP,
-    status ENUM('pendente', 'processando', 'enviado', 'entregue', 'cancelado') DEFAULT 'pendente',
-    total DECIMAL(10, 2) NOT NULL,
-    FOREIGN KEY (id_cliente) REFERENCES Clientes(id_cliente) ON DELETE CASCADE
+CREATE TABLE lojas (
+    id          INT AUTO_INCREMENT PRIMARY KEY,
+    nome        VARCHAR(100) NOT NULL,
+    localizacao VARCHAR(255),
+    contato     VARCHAR(255),
+    telefone    VARCHAR(20),
+    email       VARCHAR(100)
 );
 
-CREATE TABLE Itens_Pedido (
-    id_item INT AUTO_INCREMENT PRIMARY KEY,
-    id_pedido INT NOT NULL,
-    id_produto INT NOT NULL,
-    quantidade INT NOT NULL DEFAULT 1,
-    preco_unitario DECIMAL(10, 2) NOT NULL,
-    subtotal DECIMAL(10, 2) AS (quantidade * preco_unitario) STORED,
-    FOREIGN KEY (id_pedido) REFERENCES Pedidos(id_pedido) ON DELETE CASCADE,
-    FOREIGN KEY (id_produto) REFERENCES Produtos(id_produto) ON DELETE RESTRICT
+CREATE TABLE produtos (
+    id              INT AUTO_INCREMENT PRIMARY KEY,
+    nome            VARCHAR(100) NOT NULL,
+    descricao       TEXT,
+    tipo_id         INT NOT NULL,
+    estoque         INT NOT NULL DEFAULT 0,
+    categoria_id    INT,
+    fornecedor_padrao_id INT,
+    FOREIGN KEY (tipo_id)              REFERENCES tipos_produto(id),
+    FOREIGN KEY (categoria_id)         REFERENCES categorias(id) ON DELETE SET NULL,
+    FOREIGN KEY (fornecedor_padrao_id) REFERENCES fornecedores(id) ON DELETE SET NULL
+);
+
+CREATE TABLE compatibilidades (
+    id          INT AUTO_INCREMENT PRIMARY KEY,
+    peca_id     INT NOT NULL,
+    drone_id    INT NOT NULL,
+    FOREIGN KEY (peca_id)  REFERENCES produtos(id) ON DELETE CASCADE,
+    FOREIGN KEY (drone_id) REFERENCES produtos(id) ON DELETE CASCADE
+);
+
+CREATE TABLE movimentacoes (
+    id                  INT AUTO_INCREMENT PRIMARY KEY,
+    tipo_mov_id         INT NOT NULL,
+    data                DATETIME DEFAULT CURRENT_TIMESTAMP,
+    status_id           INT NOT NULL DEFAULT 1,
+    fornecedor_id       INT,
+    loja_id             INT,
+    observacoes         TEXT,
+    FOREIGN KEY (tipo_mov_id)   REFERENCES tipos_movimentacao(id),
+    FOREIGN KEY (status_id)     REFERENCES status_movimentacao(id),
+    FOREIGN KEY (fornecedor_id) REFERENCES fornecedores(id) ON DELETE SET NULL,
+    FOREIGN KEY (loja_id)       REFERENCES lojas(id) ON DELETE SET NULL
+);
+
+CREATE TABLE itens_movimentacao (
+    id              INT AUTO_INCREMENT PRIMARY KEY,
+    movimentacao_id INT NOT NULL,
+    produto_id      INT NOT NULL,
+    quantidade      INT NOT NULL,
+    FOREIGN KEY (movimentacao_id) REFERENCES movimentacoes(id) ON DELETE CASCADE,
+    FOREIGN KEY (produto_id)      REFERENCES produtos(id) ON DELETE RESTRICT
 );
