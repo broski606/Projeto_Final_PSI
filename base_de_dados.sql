@@ -86,3 +86,19 @@ CREATE TABLE itens_movimentacao (
     FOREIGN KEY (movimentacao_id) REFERENCES movimentacoes(id) ON DELETE CASCADE,
     FOREIGN KEY (produto_id)      REFERENCES produtos(id) ON DELETE RESTRICT
 );
+
+-- Dados estáticos dos tipos de produto, não alterar!
+INSERT INTO tipos_produto (nome, descricao) VALUES 
+('drone', 'Drones completos'),
+('peca',  'Componentes e peças avulsas');
+
+-- Dados estáticos dos tipos de movimentação, não alterar!
+INSERT INTO tipos_movimentacao (nome, descricao) VALUES 
+('entrada', 'Entrada de material no armazém'),
+('saida',   'Saída de material para loja');
+
+-- Dadosestáticos dos Status, não alterar!
+INSERT INTO status_movimentacao (nome, descricao) VALUES 
+('pendente',   'Aguardando confirmação'),
+('confirmada', 'Movimentação realizada'),
+('cancelada',  'Movimentação cancelada');
