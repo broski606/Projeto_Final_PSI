@@ -56,7 +56,8 @@ CREATE TABLE EncomendaArmazem (
     idUtilizador INT NOT NULL,
     idFornecedor INT NOT NULL,
     dataEncomenda DATE NOT NULL,
-    dataEntrega DATE NULL COMMENT,
+    dataEntrega DATE NULL,
+    ativo BOOLEAN NOT NULL DEFAULT TRUE,
     FOREIGN KEY (idUtilizador) REFERENCES Utilizador(id),
     FOREIGN KEY (idFornecedor) REFERENCES Fornecedor(id)
 );
@@ -77,6 +78,7 @@ CREATE TABLE EncomendaLoja (
     idLoja INT NOT NULL,
     dataEncomenda DATE NOT NULL,
     dataEntrega DATE NULL,
+    ativo BOOLEAN NOT NULL DEFAULT TRUE,
     FOREIGN KEY (idUtilizador) REFERENCES Utilizador(id),
     FOREIGN KEY (idLoja) REFERENCES Loja(id)
 );
