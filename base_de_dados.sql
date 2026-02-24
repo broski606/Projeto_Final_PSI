@@ -1,12 +1,12 @@
-DROP DATABASE IF EXISTS "Columbofilia-Armazem";
-CREATE DATABASE "Columbofilia-Armazem";
-USE "Columbofilia-Armazem";
+DROP DATABASE IF EXISTS Columbofilia_Armazem;
+CREATE DATABASE Columbofilia_Armazem;
+USE Columbofilia_Armazem;
 
 CREATE TABLE Categoria (
     id INT PRIMARY KEY AUTO_INCREMENT,
     designacao VARCHAR(100) NOT NULL,
     ativo BOOLEAN NOT NULL DEFAULT TRUE
-);
+)engine=innodb;
 
 CREATE TABLE Fornecedor (
     id INT PRIMARY KEY AUTO_INCREMENT,
@@ -16,7 +16,7 @@ CREATE TABLE Fornecedor (
     telefone VARCHAR(30),
     email VARCHAR(150),
     ativo BOOLEAN NOT NULL DEFAULT TRUE
-);
+)engine=innodb;
 
 CREATE TABLE Utilizador (
     id INT PRIMARY KEY AUTO_INCREMENT,
@@ -25,7 +25,7 @@ CREATE TABLE Utilizador (
     password VARCHAR(255) NOT NULL,
     admin BOOLEAN NOT NULL DEFAULT FALSE,
     ativo BOOLEAN NOT NULL DEFAULT TRUE
-);
+)engine=innodb;
 
 CREATE TABLE Loja (
     id INT PRIMARY KEY AUTO_INCREMENT,
@@ -35,7 +35,7 @@ CREATE TABLE Loja (
     email VARCHAR(150),
     telefone VARCHAR(30),
     ativo BOOLEAN NOT NULL DEFAULT TRUE
-);
+)engine=innodb;
 
 CREATE TABLE Produto (
     id INT PRIMARY KEY AUTO_INCREMENT,
@@ -49,7 +49,7 @@ CREATE TABLE Produto (
     
     FOREIGN KEY (idCategoria) REFERENCES Categoria(id),
     FOREIGN KEY (idFornecedor) REFERENCES Fornecedor(id)
-);
+)engine=innodb;
 
 CREATE TABLE EncomendaArmazem (
     nEncomendaArmazem INT PRIMARY KEY AUTO_INCREMENT,
@@ -60,7 +60,7 @@ CREATE TABLE EncomendaArmazem (
     ativo BOOLEAN NOT NULL DEFAULT TRUE,
     FOREIGN KEY (idUtilizador) REFERENCES Utilizador(id),
     FOREIGN KEY (idFornecedor) REFERENCES Fornecedor(id)
-);
+)engine=innodb;
 
 CREATE TABLE DetalheEncomendaArmazem (
     nEncomendaArmazem INT NOT NULL,
@@ -70,7 +70,7 @@ CREATE TABLE DetalheEncomendaArmazem (
     PRIMARY KEY (nEncomendaArmazem, idProduto),
     FOREIGN KEY (nEncomendaArmazem) REFERENCES EncomendaArmazem(nEncomendaArmazem),
     FOREIGN KEY (idProduto) REFERENCES Produto(id)
-);
+)engine=innodb;
 
 CREATE TABLE EncomendaLoja (
     nEncomendaLoja INT PRIMARY KEY AUTO_INCREMENT,
@@ -81,7 +81,7 @@ CREATE TABLE EncomendaLoja (
     ativo BOOLEAN NOT NULL DEFAULT TRUE,
     FOREIGN KEY (idUtilizador) REFERENCES Utilizador(id),
     FOREIGN KEY (idLoja) REFERENCES Loja(id)
-);
+)engine=innodb;
 
 CREATE TABLE DetalheEncomendaLoja (
     nEncomendaLoja INT NOT NULL,
@@ -91,4 +91,4 @@ CREATE TABLE DetalheEncomendaLoja (
     PRIMARY KEY (nEncomendaLoja, idProduto),
     FOREIGN KEY (nEncomendaLoja) REFERENCES EncomendaLoja(nEncomendaLoja),
     FOREIGN KEY (idProduto) REFERENCES Produto(id)
-);
+)engine=innodb;
