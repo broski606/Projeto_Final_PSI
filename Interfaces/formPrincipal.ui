@@ -72,7 +72,7 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>90</y>
+      <y>160</y>
       <width>170</width>
       <height>50</height>
      </rect>
@@ -91,7 +91,7 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>150</y>
+      <y>230</y>
       <width>170</width>
       <height>50</height>
      </rect>
@@ -110,7 +110,7 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>210</y>
+      <y>300</y>
       <width>170</width>
       <height>50</height>
      </rect>
@@ -129,7 +129,7 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>270</y>
+      <y>370</y>
       <width>170</width>
       <height>50</height>
      </rect>
@@ -324,7 +324,7 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>330</y>
+      <y>440</y>
       <width>170</width>
       <height>50</height>
      </rect>
@@ -343,19 +343,38 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>390</y>
+      <y>510</y>
       <width>170</width>
-      <height>170</height>
+      <height>50</height>
      </rect>
     </property>
     <property name="text">
      <string/>
     </property>
     <property name="pixmap">
-     <pixmap>Imagens/Logo.jpg</pixmap>
+     <pixmap>Imagens/barra.jpg</pixmap>
     </property>
     <property name="scaledContents">
      <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_9">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>90</y>
+      <width>170</width>
+      <height>50</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>OCR A Extended</family>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Utilizadores</string>
     </property>
    </widget>
   </widget>
