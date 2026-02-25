@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Painel Principal</string>
+   <string>Gestão de Utilizadores</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QPushButton" name="pushButton_Conta">
@@ -106,7 +106,7 @@
      <string>Saídas de Material</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_Fornercedores">
+   <widget class="QPushButton" name="pushButton_Fornecedores">
     <property name="geometry">
      <rect>
       <x>20</x>
@@ -202,28 +202,12 @@
      <string>Limpar</string>
     </property>
    </widget>
-   <widget class="QComboBox" name="comboBox_Categoria">
-    <property name="geometry">
-     <rect>
-      <x>530</x>
-      <y>90</y>
-      <width>150</width>
-      <height>30</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>OCR A Extended</family>
-      <pointsize>12</pointsize>
-     </font>
-    </property>
-   </widget>
    <widget class="QRadioButton" name="radioButton_2">
     <property name="geometry">
      <rect>
-      <x>220</x>
+      <x>550</x>
       <y>100</y>
-      <width>130</width>
+      <width>161</width>
       <height>30</height>
      </rect>
     </property>
@@ -234,31 +218,15 @@
      </font>
     </property>
     <property name="text">
-     <string>Fora de Stock</string>
-    </property>
-   </widget>
-   <widget class="QComboBox" name="comboBox_Fornecedor">
-    <property name="geometry">
-     <rect>
-      <x>370</x>
-      <y>90</y>
-      <width>150</width>
-      <height>30</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>OCR A Extended</family>
-      <pointsize>12</pointsize>
-     </font>
+     <string>Não Administrador</string>
     </property>
    </widget>
    <widget class="QRadioButton" name="radioButton_3">
     <property name="geometry">
      <rect>
-      <x>220</x>
+      <x>550</x>
       <y>70</y>
-      <width>120</width>
+      <width>121</width>
       <height>30</height>
      </rect>
     </property>
@@ -269,45 +237,7 @@
      </font>
     </property>
     <property name="text">
-     <string>Em Stock</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label">
-    <property name="geometry">
-     <rect>
-      <x>370</x>
-      <y>70</y>
-      <width>150</width>
-      <height>13</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>OCR A Extended</family>
-      <pointsize>10</pointsize>
-     </font>
-    </property>
-    <property name="text">
-     <string>Fornecedor:</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_2">
-    <property name="geometry">
-     <rect>
-      <x>530</x>
-      <y>70</y>
-      <width>150</width>
-      <height>13</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>OCR A Extended</family>
-      <pointsize>10</pointsize>
-     </font>
-    </property>
-    <property name="text">
-     <string>Categoria:</string>
+     <string>Administrador</string>
     </property>
    </widget>
    <widget class="QTableView" name="tableView">
@@ -339,7 +269,7 @@
      <bool>true</bool>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_Utilizadores">
+   <widget class="QPushButton" name="pushButton_Painel_Principal">
     <property name="geometry">
      <rect>
       <x>20</x>
@@ -355,7 +285,64 @@
      </font>
     </property>
     <property name="text">
-     <string>Utilizadores</string>
+     <string>Painel Principal</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_Alterar">
+    <property name="geometry">
+     <rect>
+      <x>210</x>
+      <y>80</y>
+      <width>100</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>OCR A Extended</family>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Alterar</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_Desativar">
+    <property name="geometry">
+     <rect>
+      <x>320</x>
+      <y>80</y>
+      <width>100</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>OCR A Extended</family>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Desativar</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_Criar">
+    <property name="geometry">
+     <rect>
+      <x>430</x>
+      <y>80</y>
+      <width>100</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>OCR A Extended</family>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Criar</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_4">
@@ -393,7 +380,7 @@
      </font>
     </property>
     <property name="text">
-     <string>Página Principal</string>
+     <string>Utilizadores</string>
     </property>
    </widget>
   </widget>
