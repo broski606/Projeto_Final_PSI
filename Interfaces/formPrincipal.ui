@@ -14,7 +14,7 @@
    <string>Painel Principal</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QPushButton" name="pushButton_Conta">
+   <widget class="QPushButton" name="pushButton_Logout">
     <property name="geometry">
      <rect>
       <x>20</x>
@@ -30,7 +30,7 @@
      </font>
     </property>
     <property name="text">
-     <string>A minha Conta</string>
+     <string>Logout</string>
     </property>
    </widget>
    <widget class="QLineEdit" name="lineEdit">

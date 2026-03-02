@@ -14,7 +14,7 @@
    <string>Gestão de Lojas</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QPushButton" name="pushButton_Conta">
+   <widget class="QPushButton" name="pushButton_Logout">
     <property name="geometry">
      <rect>
       <x>20</x>
@@ -30,7 +30,7 @@
      </font>
     </property>
     <property name="text">
-     <string>A minha Conta</string>
+     <string>Logout</string>
     </property>
    </widget>
    <widget class="QLineEdit" name="lineEdit">
@@ -68,89 +68,13 @@
      <string>Pesquisar</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_Entradas_de_Material">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>360</y>
-      <width>170</width>
-      <height>50</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>OCR A Extended</family>
-      <pointsize>10</pointsize>
-     </font>
-    </property>
-    <property name="text">
-     <string>Entradas de Materíal</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pushButton_Saidas_de_Material">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>430</y>
-      <width>170</width>
-      <height>50</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>OCR A Extended</family>
-      <pointsize>10</pointsize>
-     </font>
-    </property>
-    <property name="text">
-     <string>Saídas de Material</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pushButton_Lojas">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>220</y>
-      <width>170</width>
-      <height>50</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>OCR A Extended</family>
-      <pointsize>10</pointsize>
-     </font>
-    </property>
-    <property name="text">
-     <string>Lojas</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pushButton_Utilizadores">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>290</y>
-      <width>170</width>
-      <height>50</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>OCR A Extended</family>
-      <pointsize>10</pointsize>
-     </font>
-    </property>
-    <property name="text">
-     <string>Utilizadores</string>
-    </property>
-   </widget>
    <widget class="Line" name="line">
     <property name="geometry">
      <rect>
       <x>200</x>
-      <y>20</y>
+      <y>10</y>
       <width>10</width>
-      <height>530</height>
+      <height>120</height>
      </rect>
     </property>
     <property name="orientation">
@@ -173,9 +97,9 @@
    <widget class="Line" name="line_3">
     <property name="geometry">
      <rect>
-      <x>220</x>
-      <y>130</y>
-      <width>560</width>
+      <x>10</x>
+      <y>140</y>
+      <width>780</width>
       <height>3</height>
      </rect>
     </property>
@@ -243,37 +167,18 @@
    <widget class="QTableView" name="tableView">
     <property name="geometry">
      <rect>
-      <x>230</x>
+      <x>20</x>
       <y>160</y>
-      <width>541</width>
+      <width>760</width>
       <height>391</height>
      </rect>
     </property>
    </widget>
-   <widget class="QLabel" name="label_3">
+   <widget class="QPushButton" name="pushButton_Voltar">
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>500</y>
-      <width>170</width>
-      <height>50</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-    <property name="pixmap">
-     <pixmap>Imagens/barra.jpg</pixmap>
-    </property>
-    <property name="scaledContents">
-     <bool>true</bool>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pushButton_Painel_Principal">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>150</y>
+      <y>80</y>
       <width>170</width>
       <height>50</height>
      </rect>
@@ -285,7 +190,7 @@
      </font>
     </property>
     <property name="text">
-     <string>Painel Principal</string>
+     <string>Voltar</string>
     </property>
    </widget>
    <widget class="QPushButton" name="pushButton_Alterar">
@@ -343,44 +248,6 @@
     </property>
     <property name="text">
      <string>Criar</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_4">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>80</y>
-      <width>160</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>OCR A Extended</family>
-      <pointsize>10</pointsize>
-     </font>
-    </property>
-    <property name="text">
-     <string>Esta página é:</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_5">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>110</y>
-      <width>171</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>OCR A Extended</family>
-      <pointsize>12</pointsize>
-     </font>
-    </property>
-    <property name="text">
-     <string>Fornecedores</string>
     </property>
    </widget>
   </widget>
