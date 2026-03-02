@@ -10,7 +10,7 @@ class formLoginApp(QtWidgets.QMainWindow,Ui_MainWindow):
 
         #Definir os forms
         self.form_Principal = formPrincipal()
-        self.form_Criar_Conta = formCriarConta()
+        self.form_Criar_Conta = formCriarConta(self)
 
         #Definir os botões
         self.pushButton_Criar_Conta.clicked.connect(self.mostrar_form_Criar_Conta)
