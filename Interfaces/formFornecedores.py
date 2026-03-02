@@ -9,7 +9,7 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-
+import os
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -108,7 +108,8 @@ class Ui_MainWindow(object):
         self.label_3 = QtWidgets.QLabel(self.centralwidget)
         self.label_3.setGeometry(QtCore.QRect(20, 500, 170, 50))
         self.label_3.setText("")
-        self.label_3.setPixmap(QtGui.QPixmap(".\\Imagens/barra.jpg"))
+        img_path = os.path.join(os.path.dirname(__file__), "Imagens", "barra.jpg")
+        self.label_3.setPixmap(QtGui.QPixmap(img_path))
         self.label_3.setScaledContents(True)
         self.label_3.setObjectName("label_3")
         self.pushButton_Painel_Principal = QtWidgets.QPushButton(self.centralwidget)

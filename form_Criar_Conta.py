@@ -24,3 +24,4 @@ class formCriarConta(QtWidgets.QMainWindow,Ui_MainWindow):
 
     def criar_Conta(self):
         print("Criar Conta")
+        self.mostrar_form_Login()
