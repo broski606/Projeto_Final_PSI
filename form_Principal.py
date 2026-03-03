@@ -14,10 +14,10 @@ class formPrincipal(QtWidgets.QMainWindow,Ui_MainWindow):
         self.setupUi(self)
         #Definir os forms
         self.form_Utilizadores = formUtilizadores(self)
-        self.form_Lojas = formLojas()
-        self.form_Fornecedores = formFornecedores()
-        self.form_Entradas_de_Material = formEntradasDeMaterial()
-        self.form_Saidas_de_Material = formSaidasDeMaterial()
+        self.form_Lojas = formLojas(self)
+        self.form_Fornecedores = formFornecedores(self)
+        self.form_Entradas_de_Material = formEntradasDeMaterial(self)
+        self.form_Saidas_de_Material = formSaidasDeMaterial(self)
 
         #Definir os botões
         #Pesquisa e Filtros
