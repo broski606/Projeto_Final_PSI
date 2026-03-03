@@ -13,7 +13,7 @@ class formPrincipal(QtWidgets.QMainWindow,Ui_MainWindow):
         super().__init__()
         self.setupUi(self)
         #Definir os forms
-        self.form_Utilizadores = formUtilizadores()
+        self.form_Utilizadores = formUtilizadores(self)
         self.form_Lojas = formLojas()
         self.form_Fornecedores = formFornecedores()
         self.form_Entradas_de_Material = formEntradasDeMaterial()
@@ -82,6 +82,7 @@ class formPrincipal(QtWidgets.QMainWindow,Ui_MainWindow):
                 
                 self.tableView.resizeColumnsToContents()
                 # Selecionar apenas linhas inteiras
+                self.tableView.verticalHeader().setVisible(False)
                 self.tableView.setSelectionBehavior(QtWidgets.QTableView.SelectRows)
                 self.tableView.setSelectionMode(QtWidgets.QTableView.SingleSelection)
                 self.tableView.setEditTriggers(QtWidgets.QTableView.NoEditTriggers)

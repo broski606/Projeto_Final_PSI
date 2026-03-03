@@ -20,7 +20,6 @@ class formCriarConta(QtWidgets.QMainWindow,Ui_MainWindow):
         if self.form_Login:
             self.hide()
             self.form_Login.show()
-        #self.form_Principal.listagemStock()
 
     def criar_Conta(self):
         print("Criar Conta")

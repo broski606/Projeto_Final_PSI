@@ -5,15 +5,15 @@ def ligacao_BD():
     try:
         ligacaoBD = mysql.connector.connect(
         host="localhost",
-        database="columbofilia_armazem",
+        database="Columbofilia_Armazem",
         user="root",
         password=""
         ) #estabelecer ligação à BD
         if ligacaoBD.is_connected(): #testar se a ligação à BD está estabelecida
-            print("Ligação à BD bdEncomendas_T1 estabelecida com sucesso!")
+            print("Ligação à BD Columbofilia_Armazem estabelecida com sucesso!")
             return ligacaoBD
         else:
-            print("Erro na ligação à BD bdEncomendas_T1!")
+            print("Erro na ligação à BD Columbofilia_Armazem!")
             return -1
     except Error as e: #Se ocorrer algum erro, exibe a mensagem de erro
         print(f"Erro: {e}")
