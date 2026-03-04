@@ -174,7 +174,7 @@
     <property name="geometry">
      <rect>
       <x>220</x>
-      <y>130</y>
+      <y>180</y>
       <width>560</width>
       <height>3</height>
      </rect>
@@ -314,9 +314,9 @@
     <property name="geometry">
      <rect>
       <x>230</x>
-      <y>160</y>
+      <y>190</y>
       <width>541</width>
-      <height>391</height>
+      <height>370</height>
      </rect>
     </property>
    </widget>
@@ -394,6 +394,63 @@
     </property>
     <property name="text">
      <string>Página Principal</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_Alterar">
+    <property name="geometry">
+     <rect>
+      <x>220</x>
+      <y>140</y>
+      <width>150</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>OCR A Extended</family>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Alterar</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_Desativar">
+    <property name="geometry">
+     <rect>
+      <x>380</x>
+      <y>140</y>
+      <width>150</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>OCR A Extended</family>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Desativar</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_Novo">
+    <property name="geometry">
+     <rect>
+      <x>540</x>
+      <y>140</y>
+      <width>150</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>OCR A Extended</family>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Novo</string>
     </property>
    </widget>
   </widget>

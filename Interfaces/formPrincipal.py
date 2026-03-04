@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'formPrincipal.ui'
+# Form implementation generated from reading ui file '.\formPrincipal.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.11
 #
@@ -9,7 +9,6 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-import os
 
 
 class Ui_MainWindow(object):
@@ -78,7 +77,7 @@ class Ui_MainWindow(object):
         self.line_2.setFrameShadow(QtWidgets.QFrame.Sunken)
         self.line_2.setObjectName("line_2")
         self.line_3 = QtWidgets.QFrame(self.centralwidget)
-        self.line_3.setGeometry(QtCore.QRect(220, 130, 560, 3))
+        self.line_3.setGeometry(QtCore.QRect(220, 180, 560, 3))
         self.line_3.setFrameShape(QtWidgets.QFrame.HLine)
         self.line_3.setFrameShadow(QtWidgets.QFrame.Sunken)
         self.line_3.setObjectName("line_3")
@@ -132,13 +131,12 @@ class Ui_MainWindow(object):
         self.label_2.setFont(font)
         self.label_2.setObjectName("label_2")
         self.tableView = QtWidgets.QTableView(self.centralwidget)
-        self.tableView.setGeometry(QtCore.QRect(230, 160, 541, 391))
+        self.tableView.setGeometry(QtCore.QRect(230, 190, 541, 370))
         self.tableView.setObjectName("tableView")
         self.label_3 = QtWidgets.QLabel(self.centralwidget)
         self.label_3.setGeometry(QtCore.QRect(20, 500, 170, 50))
         self.label_3.setText("")
-        img_path = os.path.join(os.path.dirname(__file__), "Imagens", "barra.jpg")
-        self.label_3.setPixmap(QtGui.QPixmap(img_path))
+        self.label_3.setPixmap(QtGui.QPixmap(".\\Imagens/barra.jpg"))
         self.label_3.setScaledContents(True)
         self.label_3.setObjectName("label_3")
         self.pushButton_Utilizadores = QtWidgets.QPushButton(self.centralwidget)
@@ -162,6 +160,27 @@ class Ui_MainWindow(object):
         font.setPointSize(12)
         self.label_5.setFont(font)
         self.label_5.setObjectName("label_5")
+        self.pushButton_Alterar = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButton_Alterar.setGeometry(QtCore.QRect(220, 140, 150, 30))
+        font = QtGui.QFont()
+        font.setFamily("OCR A Extended")
+        font.setPointSize(10)
+        self.pushButton_Alterar.setFont(font)
+        self.pushButton_Alterar.setObjectName("pushButton_Alterar")
+        self.pushButton_Desativar = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButton_Desativar.setGeometry(QtCore.QRect(380, 140, 150, 30))
+        font = QtGui.QFont()
+        font.setFamily("OCR A Extended")
+        font.setPointSize(10)
+        self.pushButton_Desativar.setFont(font)
+        self.pushButton_Desativar.setObjectName("pushButton_Desativar")
+        self.pushButton_Novo = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButton_Novo.setGeometry(QtCore.QRect(540, 140, 150, 30))
+        font = QtGui.QFont()
+        font.setFamily("OCR A Extended")
+        font.setPointSize(10)
+        self.pushButton_Novo.setFont(font)
+        self.pushButton_Novo.setObjectName("pushButton_Novo")
         MainWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
@@ -187,6 +206,9 @@ class Ui_MainWindow(object):
         self.pushButton_Utilizadores.setText(_translate("MainWindow", "Utilizadores"))
         self.label_4.setText(_translate("MainWindow", "Esta página é:"))
         self.label_5.setText(_translate("MainWindow", "Página Principal"))
+        self.pushButton_Alterar.setText(_translate("MainWindow", "Alterar"))
+        self.pushButton_Desativar.setText(_translate("MainWindow", "Desativar"))
+        self.pushButton_Novo.setText(_translate("MainWindow", "Novo"))
 
 
 if __name__ == "__main__":
