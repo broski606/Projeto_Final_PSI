@@ -43,7 +43,7 @@ class formPrincipal(QtWidgets.QMainWindow,Ui_MainWindow):
     def mostrar_form_Utilizadores(self):
         self.hide()
         self.form_Utilizadores.show()
-        #self.formUtilizadores.ListagemUtilizadores()
+        self.form_Utilizadores.ListagemUtilizadores()
 
     def mostrar_form_Lojas(self):
         self.hide()
