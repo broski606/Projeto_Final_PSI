@@ -11,7 +11,7 @@ class formLoginApp(QtWidgets.QMainWindow,Ui_MainWindow):
         self.setupUi(self)
 
         #Definir os forms
-        self.form_Principal = formPrincipal()
+        self.form_Principal = formPrincipal(self)
         self.form_Criar_Conta = formCriarConta(self)
 
         #Definir os botões

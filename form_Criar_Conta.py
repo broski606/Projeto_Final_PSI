@@ -1,6 +1,5 @@
 from PyQt5 import QtWidgets
 from Interfaces.formCriarConta import Ui_MainWindow
-from form_Principal import formPrincipal
 import bcrypt
 from base_dados import operacao_DML, ligacao_BD
 
@@ -10,7 +9,6 @@ class formCriarConta(QtWidgets.QMainWindow,Ui_MainWindow):
         self.setupUi(self)
 
         #Definir os forms
-        self.form_Principal = formPrincipal()
         # login_form is passed by quem cria o form, evita import circular
         self.form_Login = login_form
 

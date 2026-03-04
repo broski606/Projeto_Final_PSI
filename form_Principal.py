@@ -9,10 +9,11 @@ from form_Saidas_de_Material import formSaidasDeMaterial
 from base_dados import ligacao_BD, listagem_BD, consultaUmValor, operacao_DML
 
 class formPrincipal(QtWidgets.QMainWindow,Ui_MainWindow):
-    def __init__(self):
+    def __init__(self, formLogin):
         super().__init__()
         self.setupUi(self)
         #Definir os forms
+        self.form_Login = formLogin
         self.form_Utilizadores = formUtilizadores(self)
         self.form_Lojas = formLojas(self)
         self.form_Fornecedores = formFornecedores(self)
@@ -25,6 +26,7 @@ class formPrincipal(QtWidgets.QMainWindow,Ui_MainWindow):
         self.pushButton_Pesquisar.clicked.connect(self.ListagemStock)
 
         #Barra de Utilidades
+        self.pushButton_Logout.clicked.connect(self.mostrar_form_login)
         self.pushButton_Utilizadores.clicked.connect(self.mostrar_form_Utilizadores)
         self.pushButton_Lojas.clicked.connect(self.mostrar_form_Lojas)
         self.pushButton_Fornercedores.clicked.connect(self.mostrar_form_Fornecedores)
@@ -33,6 +35,11 @@ class formPrincipal(QtWidgets.QMainWindow,Ui_MainWindow):
         
     #Métodos
     #Mostrar forms
+    def mostrar_form_login(self):
+        self.hide()
+        self.form_Login.show()
+        self.form_Login.lineEdit_Palavra_Passe.setText("")
+
     def mostrar_form_Utilizadores(self):
         self.hide()
         self.form_Utilizadores.show()
