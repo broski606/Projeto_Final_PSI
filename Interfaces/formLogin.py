@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'formLogin.ui'
+# Form implementation generated from reading ui file './Interfaces/formLogin.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.11
 #
@@ -9,7 +9,6 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-import os
 
 
 class Ui_MainWindow(object):
@@ -43,13 +42,12 @@ class Ui_MainWindow(object):
         self.label_2 = QtWidgets.QLabel(self.centralwidget)
         self.label_2.setGeometry(QtCore.QRect(20, 50, 380, 370))
         self.label_2.setText("")
-        img_path = os.path.join(os.path.dirname(__file__), "Imagens", "Logo.jpg")
-        self.label_2.setPixmap(QtGui.QPixmap(img_path))
+        self.label_2.setPixmap(QtGui.QPixmap("./Interfaces/Imagens/Logo.jpg"))
         self.label_2.setScaledContents(True)
         self.label_2.setObjectName("label_2")
-        self.lineEdit_Nome_Utilizador = QtWidgets.QLineEdit(self.centralwidget)
-        self.lineEdit_Nome_Utilizador.setGeometry(QtCore.QRect(440, 160, 321, 30))
-        self.lineEdit_Nome_Utilizador.setObjectName("lineEdit_Nome_Utilizador")
+        self.lineEdit_Email = QtWidgets.QLineEdit(self.centralwidget)
+        self.lineEdit_Email.setGeometry(QtCore.QRect(440, 160, 321, 30))
+        self.lineEdit_Email.setObjectName("lineEdit_Email")
         self.label_6 = QtWidgets.QLabel(self.centralwidget)
         self.label_6.setGeometry(QtCore.QRect(440, 210, 191, 30))
         font = QtGui.QFont()
@@ -79,7 +77,7 @@ class Ui_MainWindow(object):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "Criação de Conta"))
         self.pushButton_Criar_Conta.setText(_translate("MainWindow", "Criar conta"))
-        self.label.setText(_translate("MainWindow", "Nome de Utilizador:"))
+        self.label.setText(_translate("MainWindow", "Email"))
         self.label_3.setText(_translate("MainWindow", "Quem és Tu?"))
         self.label_6.setText(_translate("MainWindow", "Palavra Passe:"))
         self.pushButton_Entrar.setText(_translate("MainWindow", "Entrar"))

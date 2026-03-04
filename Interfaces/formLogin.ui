@@ -49,7 +49,7 @@
      </font>
     </property>
     <property name="text">
-     <string>Nome de Utilizador:</string>
+     <string>Email</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_3">
@@ -93,7 +93,7 @@
      <bool>true</bool>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lineEdit_Nome_Utilizador">
+   <widget class="QLineEdit" name="lineEdit_Email">
     <property name="geometry">
      <rect>
       <x>440</x>
