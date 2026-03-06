@@ -27,6 +27,9 @@ class formLoginApp(QtWidgets.QMainWindow,Ui_MainWindow):
     def mostrar_form_Criar_Conta(self):
         self.hide()
         self.form_Criar_Conta.show()
+        self.form_Criar_Conta.lineEdit_Email.setText("")
+        self.form_Criar_Conta.lineEdit_Palavra_Passe.setText("")
+        self.form_Criar_Conta.lineEdit_Nome_Utilizador.setText("")
 
     def verificar_login(self):
         conn = ligacao_BD()
