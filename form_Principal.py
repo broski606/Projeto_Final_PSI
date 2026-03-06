@@ -81,13 +81,14 @@ class formPrincipal(QtWidgets.QMainWindow,Ui_MainWindow):
             if conn_BD and conn_BD!=-1:
                 filtro = self.lineEdit.text()
                 if len(filtro) > 0:
-                    cmd_sql = f"SELECT id, idCategoria, designacao, preco, stock FROM Produto WHERE designacao LIKE '%{filtro}%' ORDER BY designacao ASC;"
+                    cmd_sql = f"SELECT Produto.id, Categoria.designacao, Fornecedor.nome, Produto.designacao, Produto.preco, Produto.precoRevenda, Produto.stock FROM Produto, Fornecedor, Categoria WHERE Produto.idCategoria = Categoria.id AND Produto.idFornecedor = Fornecedor.id AND Produto.ativo = 1 AND Produto.designacao LIKE '%{filtro}%' ORDER BY Produto.designacao ASC;"
                     dados = listagem_BD(conn_BD, cmd_sql)
                 else:
-                    cmd_sql = "SELECT id, idCategoria, designacao, preco, stock FROM Produto ORDER BY designacao ASC;"
+                    #cmd_sql = "SELECT id, idCategoria, designacao, preco, stock FROM Produto ORDER BY designacao ASC;"
+                    cmd_sql = f"SELECT Produto.id, Categoria.designacao, Fornecedor.nome, Produto.designacao, Produto.preco, Produto.precoRevenda, Produto.stock FROM Produto, Fornecedor, Categoria WHERE Produto.idCategoria = Categoria.id AND Produto.idFornecedor = Fornecedor.id AND Produto.ativo = 1 AND Produto.designacao LIKE '%{filtro}%' ORDER BY Produto.designacao ASC;"
                     dados = listagem_BD(conn_BD, cmd_sql)
                 modelo = QStandardItemModel()
-                modelo.setHorizontalHeaderLabels(["id", "idCategoria", "designação", "preco", "stock"])
+                modelo.setHorizontalHeaderLabels(["Id", "Categoria", "Fornecedor", "Designação", "Preço", "Preço de Revenda", "Stock"])
                 for linha in dados:
                     modelo.appendRow([QStandardItem(str(celula) if celula is not None else "") for celula in linha])
                 self.tableView.setModel(modelo)
