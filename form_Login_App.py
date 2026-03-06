@@ -36,8 +36,8 @@ class formLoginApp(QtWidgets.QMainWindow,Ui_MainWindow):
         try:
             email = self.lineEdit_Email.text()
             
-            cmd_sql = f"SELECT password FROM Utilizador WHERE email = '{email}'"
-            dados = listagem_BD(conn, cmd_sql)
+            cmd_sql = "SELECT password FROM Utilizador WHERE email = %s"
+            dados = listagem_BD(conn, cmd_sql, (email,))
 
             if not dados:
                 QtWidgets.QMessageBox.warning(self, "Aviso", "Nenhum utilizador está associado a este email!")

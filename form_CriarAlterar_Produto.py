@@ -1,71 +1,262 @@
 from PyQt5 import QtWidgets
-#from PyQt5.QtGui import QStandardItemModel, QStandardItem
-#from Interfaces.formAlterarCategoria import Ui_Form
 from Interfaces.formCriarAlterarProduto import Ui_MainWindow
 from base_dados import ligacao_BD, listagem_BD, consultaUmValor, operacao_DML
-#from funcoes_gerais import verificar_tipo_dados
 
-class formCriarAlterarProduto(QtWidgets.QMainWindow,Ui_MainWindow):
-    def __init__(self, formPrincipal):
-
-        super().__init__()
+class formCriarAlterarProduto(QtWidgets.QMainWindow, Ui_MainWindow):
+    def __init__(self, parent=None):
+        super().__init__(parent)
         self.setupUi(self)
-        '''self.designacao = None
-        self.form_categorias = form_categorias
-
-        self.pushButton_gravar.clicked.connect(self.gravar)
-        self.pushButton_voltar.clicked.connect(self.voltar)'''
+        
+        # Variáveis de controlo
+        self.id_produto = None
+        self.designacao_original = None
+        self.em_edicao = False
+        
+        # Conexões dos botões
+        self.pushButton_CriarAlterar.clicked.connect(self.gravar)
+        self.pushButton_Voltar.clicked.connect(self.voltar)
+        self.checkBox.stateChanged.connect(self.atualizar_interface)
+        
+        # Carrega os dados iniciais
+        self.carregar_categorias()
+        self.carregar_fornecedores()
+        self.limpar_formulario()
 
     def voltar(self):
         self.close()
-        self.form_categorias.show()
-
-    def inicializar(self, selecao):
-        linha = selecao[0].row() # Primeira linha selecionada
-        modelo =self.form_categorias.tableView.model()
-        self.lineEdit_id.setText(modelo.data(modelo.index(linha, 0)))
-        self.lineEdit_designacao.setText(modelo.data(modelo.index(linha, 1)))
-        self.designacao = modelo.data(modelo.index(linha, 1))
-        self.lineEdit_id.setEnabled(False)
-
-    def gravar(self):
+    
+    def carregar_categorias(self):
+        """Carrega as categorias ativas da base de dados"""
         try:
-            id = self.lineEdit_id.text()
-            designacao = self.lineEdit_designacao.text()
-            if len(designacao)==0:
-                QtWidgets.QMessageBox.critical(self,"Aviso","Designacao da categoria por preencher")
-                return
-
-            if self.designacao == designacao:
-                QtWidgets.QMessageBox.critical(self,"Aviso","A designação da categoria não foi alterada")
-                return
             conn_BD = ligacao_BD()
             if not conn_BD:
-                QtWidgets.QMessageBox.critical(self,"Erro","A ligação à BD não está estabelecida")
+                QtWidgets.QMessageBox.critical(self, "Erro", "Ligação à BD não estabelecida")
                 return
-            cmd_sql = f"SELECT COUNT(*) FROM categoria WHERE id = %s;"
-            numRegistosId = consultaUmValor(conn_BD, cmd_sql, (id,))
-            cmd_sql = f"SELECT COUNT(*) FROM categoria WHERE designacao = %s;"
-            numRegistosD = consultaUmValor(conn_BD, cmd_sql, (designacao,))
-            if numRegistosId == -1 or numRegistosD == -1:
-                QtWidgets.QMessageBox.critical(self,"Erro","Ocorreu um erro ao verificar a existência da categoria")
-                return
-            elif numRegistosD > 0:
-                QtWidgets.QMessageBox.critical(self,"Aviso", f"Já existe uma categoria com designação {designacao} ou com id {id} introduzidos")
-                return
-            elif numRegistosId==0:
-                QtWidgets.QMessageBox.critical(self,"Aviso", f"Não foi possível encontrar a categoria com identificador {id}!")
-                return
-            cmd_sql = "UPDATE categoria SET designacao = %s WHERE id = %s;"
-            numRegistos = operacao_DML(conn_BD, cmd_sql, (designacao, id,))
-            if numRegistos == -1:
-                QtWidgets.QMessageBox.critical(self,"Erro","Ocorreu um erro ao alterar o registo")
-                return
-            QtWidgets.QMessageBox.information(self, "Confirmação", "Categoria alterada com sucesso!\n Pretende alterar dados de uma nova categoria?")
-            self.close()
-            self.form_categorias.show()
-            self.form_categorias.listagemCategorias()
+            
+            cmd_sql = "SELECT id, designacao FROM Categoria WHERE ativo = TRUE ORDER BY designacao;"
+            resultados = listagem_BD(conn_BD, cmd_sql)
+            
+            if resultados != -1:
+                self.comboBox_Categoria.clear()
+                for categoria in resultados:
+                    self.comboBox_Categoria.addItem(categoria[1], categoria[0])
+            
             conn_BD.close()
         except Exception as e:
-            QtWidgets.QMessageBox.critical(self,"Erro",f"Erro: {e}")
-            return
+            QtWidgets.QMessageBox.critical(self, "Erro", f"Erro ao carregar categorias: {e}")
+    
+    def carregar_fornecedores(self):
+        """Carrega os fornecedores ativos da base de dados"""
+        try:
+            conn_BD = ligacao_BD()
+            if not conn_BD:
+                QtWidgets.QMessageBox.critical(self, "Erro", "Ligação à BD não estabelecida")
+                return
+            
+            cmd_sql = "SELECT id, nome FROM Fornecedor WHERE ativo = TRUE ORDER BY nome;"
+            resultados = listagem_BD(conn_BD, cmd_sql)
+            
+            if resultados != -1:
+                self.comboBox_Fornecedor.clear()
+                for fornecedor in resultados:
+                    self.comboBox_Fornecedor.addItem(fornecedor[1], fornecedor[0])
+            
+            conn_BD.close()
+        except Exception as e:
+            QtWidgets.QMessageBox.critical(self, "Erro", f"Erro ao carregar fornecedores: {e}")
+    
+    def limpar_formulario(self):
+        """Limpa todos os campos do formulário"""
+        self.lineEdit_Id.clear()
+        self.lineEdit_Id.setEnabled(True)
+        self.lineEdit_Designacao.clear()
+        self.lineEdit_Preco.clear()
+        self.lineEdit_PrecoRevenda.clear()
+        self.lineEdit_Stock.clear()
+        self.checkBox.setChecked(True)
+        self.pushButton_CriarAlterar.setText("Criar")
+        self.em_edicao = False
+        self.id_produto = None
+        self.designacao_original = None
+    
+    def mode_edicao(self, id_produto):
+        """Carrega um produto existente para edição"""
+        try:
+            conn_BD = ligacao_BD()
+            if not conn_BD:
+                QtWidgets.QMessageBox.critical(self, "Erro", "Ligação à BD não estabelecida")
+                return
+            
+            cmd_sql = """SELECT id, idCategoria, idFornecedor, designacao, 
+                               preco, precoRevenda, stock, ativo 
+                        FROM Produto WHERE id = %s;"""
+            cursor = conn_BD.cursor()
+            cursor.execute(cmd_sql, (id_produto,))
+            resultado = cursor.fetchone()
+            cursor.close()
+            conn_BD.close()
+            
+            if not resultado:
+                QtWidgets.QMessageBox.warning(self, "Aviso", "Produto não encontrado")
+                return
+            
+            # Preenche os campos
+            self.id_produto = resultado[0]
+            self.lineEdit_Id.setText(str(resultado[0]))
+            self.lineEdit_Id.setEnabled(False)
+            
+            # Seleciona a categoria
+            idx_cat = self.comboBox_Categoria.findData(resultado[1])
+            if idx_cat >= 0:
+                self.comboBox_Categoria.setCurrentIndex(idx_cat)
+            
+            # Seleciona o fornecedor
+            idx_forn = self.comboBox_Fornecedor.findData(resultado[2])
+            if idx_forn >= 0:
+                self.comboBox_Fornecedor.setCurrentIndex(idx_forn)
+            
+            self.lineEdit_Designacao.setText(resultado[3])
+            self.designacao_original = resultado[3]
+            self.lineEdit_Preco.setText(str(resultado[4]))
+            self.lineEdit_PrecoRevenda.setText(str(resultado[5]))
+            self.lineEdit_Stock.setText(str(resultado[6]))
+            self.checkBox.setChecked(bool(resultado[7]))
+            
+            self.pushButton_CriarAlterar.setText("Alterar")
+            self.em_edicao = True
+        except Exception as e:
+            QtWidgets.QMessageBox.critical(self, "Erro", f"Erro ao carregar produto: {e}")
+    
+    def validar_dados(self):
+        """Valida os dados do formulário"""
+        id_txt = self.lineEdit_Id.text().strip()
+        designacao = self.lineEdit_Designacao.text().strip()
+        preco_txt = self.lineEdit_Preco.text().strip()
+        preco_revenda_txt = self.lineEdit_PrecoRevenda.text().strip()
+        stock_txt = self.lineEdit_Stock.text().strip()
+        
+        if not designacao:
+            QtWidgets.QMessageBox.warning(self, "Aviso", "A designação do produto é obrigatória!")
+            return None
+        
+        if not preco_txt:
+            QtWidgets.QMessageBox.warning(self, "Aviso", "O preço de compra é obrigatório!")
+            return None
+        
+        if not preco_revenda_txt:
+            QtWidgets.QMessageBox.warning(self, "Aviso", "O preço de revenda é obrigatório!")
+            return None
+        
+        if not stock_txt:
+            QtWidgets.QMessageBox.warning(self, "Aviso", "O stock é obrigatório!")
+            return None
+        
+        try:
+            preco = float(preco_txt)
+            preco_revenda = float(preco_revenda_txt)
+            stock = int(stock_txt)
+        except ValueError:
+            QtWidgets.QMessageBox.warning(self, "Aviso", "Preço e stock devem ser números válidos!")
+            return None
+        
+        if preco < 0 or preco_revenda < 0:
+            QtWidgets.QMessageBox.warning(self, "Aviso", "Preços não podem ser negativos!")
+            return None
+        
+        if stock < 0:
+            QtWidgets.QMessageBox.warning(self, "Aviso", "Stock não pode ser negativo!")
+            return None
+        
+        if preco_revenda < preco:
+            QtWidgets.QMessageBox.warning(self, "Aviso", "Preço de revenda não pode ser menor que o preço de compra!")
+            return None
+        
+        return {
+            'designacao': designacao,
+            'preco': preco,
+            'preco_revenda': preco_revenda,
+            'stock': stock
+        }
+    
+    def atualizar_interface(self):
+        """Atualiza a interface conforme necessário"""
+        pass
+    
+    def gravar(self):
+        try:
+            # Validação dos dados
+            dados = self.validar_dados()
+            if not dados:
+                return
+            
+            conn_BD = ligacao_BD()
+            if not conn_BD:
+                QtWidgets.QMessageBox.critical(self, "Erro", "Ligação à BD não estabelecida")
+                return
+            
+            id_categoria = self.comboBox_Categoria.currentData()
+            id_fornecedor = self.comboBox_Fornecedor.currentData()
+            ativo = self.checkBox.isChecked()
+            
+            if self.em_edicao:
+                # Modo edição - Alterar produto existente
+                cmd_sql = """UPDATE Produto SET designacao = %s, preco = %s, 
+                                               precoRevenda = %s, stock = %s, 
+                                               ativo = %s, idCategoria = %s, 
+                                               idFornecedor = %s 
+                             WHERE id = %s;"""
+                params = (dados['designacao'], dados['preco'], dados['preco_revenda'], 
+                         dados['stock'], ativo, id_categoria, id_fornecedor, self.id_produto)
+                
+                numRegistos = operacao_DML(conn_BD, cmd_sql, params)
+                
+                if numRegistos == -1:
+                    QtWidgets.QMessageBox.critical(self, "Erro", "Erro ao alterar o produto")
+                    conn_BD.close()
+                    return
+                
+                QtWidgets.QMessageBox.information(self, "Sucesso", "Produto alterado com sucesso!")
+            else:
+                # Modo criação - Novo produto
+                id_produto = self.lineEdit_Id.text().strip()
+                
+                if not id_produto:
+                    QtWidgets.QMessageBox.warning(self, "Aviso", "Id do produto é obrigatório!")
+                    conn_BD.close()
+                    return
+                
+                # Verifica se o ID já existe
+                cmd_sql = "SELECT COUNT(*) FROM Produto WHERE id = %s;"
+                numRegistos = consultaUmValor(conn_BD, cmd_sql, (id_produto,))
+                
+                if numRegistos == -1:
+                    QtWidgets.QMessageBox.critical(self, "Erro", "Erro ao verificar ID do produto")
+                    conn_BD.close()
+                    return
+                
+                if numRegistos > 0:
+                    QtWidgets.QMessageBox.warning(self, "Aviso", f"Já existe um produto com ID {id_produto}!")
+                    conn_BD.close()
+                    return
+                
+                # Insere novo produto
+                cmd_sql = """INSERT INTO Produto (id, idCategoria, idFornecedor, 
+                                                   designacao, preco, precoRevenda, 
+                                                   stock, ativo) 
+                             VALUES (%s, %s, %s, %s, %s, %s, %s, %s);"""
+                params = (id_produto, id_categoria, id_fornecedor, dados['designacao'], 
+                         dados['preco'], dados['preco_revenda'], dados['stock'], ativo)
+                
+                numRegistos = operacao_DML(conn_BD, cmd_sql, params)
+                
+                if numRegistos == -1:
+                    QtWidgets.QMessageBox.critical(self, "Erro", "Erro ao criar o produto")
+                    conn_BD.close()
+                    return
+                
+                QtWidgets.QMessageBox.information(self, "Sucesso", "Produto criado com sucesso!")
+                self.limpar_formulario()
+            
+            conn_BD.close()
+        except Exception as e:
+            QtWidgets.QMessageBox.critical(self, "Erro", f"Erro: {e}")
