@@ -28,6 +28,7 @@ class formPrincipal(QtWidgets.QMainWindow,Ui_MainWindow):
         self.pushButton_Pesquisar.clicked.connect(self.ListagemStock)
         self.pushButton_Alterar.clicked.connect(self.alterar)
         self.pushButton_Novo.clicked.connect(self.novo)
+        self.pushButton_Desativar.clicked.connect(self.DesativarProduto)
 
         #Barra de Utilidades
         self.pushButton_Logout.clicked.connect(self.mostrar_form_login)
@@ -117,3 +118,42 @@ class formPrincipal(QtWidgets.QMainWindow,Ui_MainWindow):
         self.hide()
         self.form_Criar_Alterar_Produto.show()
         self.form_Criar_Alterar_Produto.inicializar(None, "novo")
+
+    def DesativarProduto(self):
+        selecionados = self.tableView.selectionModel().selectedRows()
+        if selecionados:
+            linha = selecionados[0].row() # primeira linha selecionada
+            modelo = self.tableView.model()
+            id_produto = modelo.data(modelo.index(linha, 0)) # Primeiro item da linha (identificador)
+            nome_produto = modelo.data(modelo.index(linha, 3))
+
+            conn_BD = ligacao_BD()
+            if conn_BD and conn_BD!=-1:
+                cmd_sql = "SELECT COUNT(*) FROM DetalheEncomendaArmazem WHERE idProduto = %s;"
+                num_registos = consultaUmValor(conn_BD,cmd_sql,(id_produto,))
+                if num_registos == 0:
+                    # Verificar também nas encomendas de loja
+                    cmd_sql = "SELECT COUNT(*) FROM DetalheEncomendaLoja WHERE idProduto = %s;"
+                    num_registos = consultaUmValor(conn_BD,cmd_sql,(id_produto,))
+
+                if num_registos == 0:
+                    resposta = QtWidgets.QMessageBox.question(
+                        self,
+                        "Questão",
+                        f"Tem certeza de que deseja desativar o produto com identificador {id_produto} e designação '{nome_produto}'?"
+                    )
+                    if resposta == QtWidgets.QMessageBox.Yes:
+                            # Desativar o produto em vez de eliminar
+                            cmd_sql = "UPDATE Produto SET ativo = 0 WHERE id = %s;"
+                            num_registos= operacao_DML(conn_BD,cmd_sql,(id_produto,))
+                            if num_registos > 0: 
+                                QtWidgets.QMessageBox.information(self, "Sucesso", "O produto foi desativado com sucesso!")
+                                self.ListagemStock()
+                            else:
+                                QtWidgets.QMessageBox.warning(self, "Aviso", "Nenhum registo foi alterado !")
+                    else:
+                            QtWidgets.QMessageBox.warning(self, "Aviso", "A desativação do produto foi cancelada!")
+                else:
+                    QtWidgets.QMessageBox.warning(self,"Aviso",f"Não é possível desativar o produto '{nome_produto}' pois ele faz parte de pelo menos uma encomenda.")
+        else:
+            QtWidgets.QMessageBox.warning(self,"Aviso","É necessário selecionar a linha da tabela que contém o produto a desativar!")

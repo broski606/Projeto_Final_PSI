@@ -14,6 +14,8 @@ class formSaidasDeMaterial(QtWidgets.QMainWindow,Ui_MainWindow):
         #Definir os botões
         self.pushButton_Voltar.clicked.connect(self.Voltar)
         self.pushButton_Logout.clicked.connect(self.mostrar_form_login)
+        self.pushButton_Limpar.clicked.connect(self.LimparFiltro)
+        self.pushButton_Pesquisar.clicked.connect(self.listagemEncomenda)
         
     #Métodos
     def Voltar(self):

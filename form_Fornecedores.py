@@ -14,7 +14,10 @@ class formFornecedores(QtWidgets.QMainWindow,Ui_MainWindow):
         #Definir os botões
         self.pushButton_Voltar.clicked.connect(self.Voltar)
         self.pushButton_Logout.clicked.connect(self.mostrar_form_login)
-        
+        self.pushButton_Desativar.clicked.connect(self.DesativarProduto)
+        self.pushButton_Pesquisar.clicked.connect(self.ListagemFornecedores)
+        self.pushButton_Limpar.clicked.connect(self.LimparFiltro)
+
     #Métodos
     #Mostar Formulários
     def Voltar(self):
@@ -57,3 +60,48 @@ class formFornecedores(QtWidgets.QMainWindow,Ui_MainWindow):
                 self.tableView.setEditTriggers(QtWidgets.QTableView.NoEditTriggers)
         except Exception as e:
             QtWidgets.QMessageBox.critical(self,"Erro",f"Ocorreu um erro:{e}")
+
+    #Criar(Ainda não é para implementar) alterar(Ainda não é para implementar) e apagar(Implementar já)
+    '''def alterar(self):
+        selecao = self.tableView.selectionModel().selectedRows()
+        if not selecao:
+            QtWidgets.QMessageBox.warning(self, "Aviso", "É necessário selecionar o registo a alterar!")
+            return
+        
+        self.hide()
+        self.form_Criar_Alterar_Produto.show()
+        self.form_Criar_Alterar_Produto.inicializar(selecao, "alterar")'''
+
+    '''def novo(self):
+        self.hide()
+        self.form_Criar_Alterar_Produto.show()
+        self.form_Criar_Alterar_Produto.inicializar(None, "novo")'''
+
+    def DesativarProduto(self):
+        selecionados = self.tableView.selectionModel().selectedRows()
+        if selecionados:
+            linha = selecionados[0].row() # primeira linha selecionada
+            modelo = self.tableView.model()
+            id_fornecedor = modelo.data(modelo.index(linha, 0)) # Primeiro item da linha (identificador)
+            nome_fornecedor = modelo.data(modelo.index(linha, 1))
+
+            conn_BD = ligacao_BD()
+            if conn_BD and conn_BD!=-1:
+                resposta = QtWidgets.QMessageBox.question(
+                    self,
+                    "Questão",
+                    f"Tem certeza de que deseja desativar o fornecedor com identificador {id_fornecedor} e designação '{nome_fornecedor}'?"
+                )
+                if resposta == QtWidgets.QMessageBox.Yes:
+                        # Desativar o fornecedor em vez de eliminar
+                        cmd_sql = "UPDATE Fornecedor SET ativo = 0 WHERE id = %s;"
+                        num_registos= operacao_DML(conn_BD,cmd_sql,(id_fornecedor,))
+                        if num_registos > 0:
+                            QtWidgets.QMessageBox.information(self, "Sucesso", "O fornecedor foi desativado com sucesso!")
+                            self.ListagemFornecedores()
+                        else:
+                            QtWidgets.QMessageBox.warning(self, "Aviso", "Nenhum registo foi alterado !")
+                else:
+                        QtWidgets.QMessageBox.warning(self, "Aviso", "A desativação do fornecedor foi cancelada!")
+        else:
+            QtWidgets.QMessageBox.warning(self,"Aviso","É necessário selecionar a linha da tabela que contém o fornecedor a desativar!")
