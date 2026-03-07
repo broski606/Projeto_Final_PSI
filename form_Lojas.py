@@ -31,7 +31,7 @@ class formLojas(QtWidgets.QMainWindow,Ui_MainWindow):
     def LimparFiltro(self):
         self.lineEdit.setText("") 
         #self.lineEdit.clear()
-        self.ListagemUtilizadores()
+        self.ListagemLojas()
 
     def ListagemLojas(self):
         try:
@@ -39,12 +39,12 @@ class formLojas(QtWidgets.QMainWindow,Ui_MainWindow):
             if conn_BD and conn_BD!=-1:
                 filtro = self.lineEdit.text()
                 if len(filtro) > 0:
-                    cmd_sql = f"SELECT id, nome, email FROM Utilizador WHERE nome LIKE '%{filtro}%' OR email LIKE '%{filtro}%' ORDER BY nome ASC;"
+                    cmd_sql = f"SELECT id, nome, nif, morada, email, telefone FROM Loja WHERE nome LIKE '%{filtro}%' OR email LIKE '%{filtro}%' OR morada LIKE '%{filtro}%' OR nif LIKE '%{filtro}%' ORDER BY nome ASC;"
                 else:
-                    cmd_sql = "SELECT id, nome, email FROM Utilizador ORDER BY nome ASC;"
+                    cmd_sql = "SELECT id, nome, nif, morada, email, telefone FROM Loja WHERE ativo = 1 ORDER BY nome ASC;"
                 dados = listagem_BD(conn_BD, cmd_sql)
                 modelo = QStandardItemModel()
-                modelo.setHorizontalHeaderLabels(["id", "nome", "email"])
+                modelo.setHorizontalHeaderLabels(["id", "nome", "nif", "morada", "email", "telefone"])
                 for linha in dados:
                     modelo.appendRow([QStandardItem(str(celula) if celula is not None else "") for celula in linha])
                 self.tableView.setModel(modelo)

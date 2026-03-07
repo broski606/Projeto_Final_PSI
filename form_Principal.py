@@ -52,22 +52,22 @@ class formPrincipal(QtWidgets.QMainWindow,Ui_MainWindow):
     def mostrar_form_Lojas(self):
         self.hide()
         self.form_Lojas.show()
-        #self.formUtilizadores.ListagemUtilizadores()
+        self.form_Lojas.ListagemLojas()
 
     def mostrar_form_Fornecedores(self):
         self.hide()
         self.form_Fornecedores.show()
-        #self.formUtilizadores.ListagemUtilizadores()
+        self.form_Fornecedores.ListagemFornecedores()
     
     def mostrar_form_Entradas_de_Material(self):
         self.hide()
         self.form_Entradas_de_Material.show()
-        #self.formUtilizadores.ListagemUtilizadores()
+        self.form_Entradas_de_Material.listagemEncomenda()
 
     def mostrar_form_Saidas_de_Material(self):
         self.hide()
         self.form_Saidas_de_Material.show()
-        #self.formUtilizadores.ListagemUtilizadores()
+        self.form_Saidas_de_Material.listagemEncomenda()
 
     #Pesquisa e Filtros
     def LimparFiltro(self):

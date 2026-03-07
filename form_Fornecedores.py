@@ -1,9 +1,7 @@
 from PyQt5 import QtWidgets
 from Interfaces.formFornecedores import Ui_MainWindow
-#from form_categorias import formCategorias
-#from form_artigos import formArtigos
-#from form_cliente import formCliente
-#from form_encomendas import formEncomendas
+from base_dados import ligacao_BD, listagem_BD, consultaUmValor, operacao_DML
+from PyQt5.QtGui import QStandardItemModel, QStandardItem
 
 class formFornecedores(QtWidgets.QMainWindow,Ui_MainWindow):
     def __init__(self, formPrincipal):
@@ -18,6 +16,7 @@ class formFornecedores(QtWidgets.QMainWindow,Ui_MainWindow):
         self.pushButton_Logout.clicked.connect(self.mostrar_form_login)
         
     #Métodos
+    #Mostar Formulários
     def Voltar(self):
         self.close()
         self.form_Principal.show()
@@ -27,6 +26,34 @@ class formFornecedores(QtWidgets.QMainWindow,Ui_MainWindow):
         self.hide()
         self.form_Login.show()
         self.form_Login.lineEdit_Palavra_Passe.setText("")
+    
+    #Pesquisa e Filtros
+    def LimparFiltro(self):
+        self.lineEdit.setText("") 
+        #self.lineEdit.clear()
+        self.ListagemFornecedores()
 
-    def ListagemFornecedores():
-        pass
+    def ListagemFornecedores(self):
+        try:
+            conn_BD = ligacao_BD()
+            if conn_BD and conn_BD!=-1:
+                filtro = self.lineEdit.text()
+                if len(filtro) > 0:
+                    cmd_sql = f"SELECT id, nome, nif, morada, telefone, email FROM Fornecedor WHERE nome LIKE '%{filtro}%' OR email LIKE '%{filtro}%' OR morada LIKE '%{filtro}%' OR NIF LIKE '%{filtro}%' ORDER BY nome ASC;"
+                else:
+                    cmd_sql = "SELECT id, nome, nif, morada, telefone, email FROM Fornecedor ORDER BY nome ASC;"
+                dados = listagem_BD(conn_BD, cmd_sql)
+                modelo = QStandardItemModel()
+                modelo.setHorizontalHeaderLabels(["id", "nome", "nif", "morada", "telefone", "email"])
+                for linha in dados:
+                    modelo.appendRow([QStandardItem(str(celula) if celula is not None else "") for celula in linha])
+                self.tableView.setModel(modelo)
+                
+                self.tableView.resizeColumnsToContents()
+                # Selecionar apenas linhas inteiras
+                self.tableView.verticalHeader().setVisible(False)
+                self.tableView.setSelectionBehavior(QtWidgets.QTableView.SelectRows)
+                self.tableView.setSelectionMode(QtWidgets.QTableView.SingleSelection)
+                self.tableView.setEditTriggers(QtWidgets.QTableView.NoEditTriggers)
+        except Exception as e:
+            QtWidgets.QMessageBox.critical(self,"Erro",f"Ocorreu um erro:{e}")
