@@ -29,6 +29,20 @@ class formSaidasDeMaterial(QtWidgets.QMainWindow,Ui_MainWindow):
         self.form_Login.lineEdit_Palavra_Passe.setText("")
 
     #Listagem e filtros
+    def LimparFiltro(self):
+        self.lineEdit.setText("")
+
+        #self.radioButton.setAutoExclusive(False)
+        #self.radioButton_2.setAutoExclusive(False)
+        #
+        #self.radioButton.setChecked(False)
+        #self.radioButton_2.setChecked(False)
+        #
+        #self.radioButton.setAutoExclusive(True)
+        #self.radioButton_2.setAutoExclusive(True)
+
+        self.listagemEncomenda()
+    
     def listagemEncomenda(self):
         try:
             conn_BD = ligacao_BD()
