@@ -9,7 +9,7 @@ class formUtilizadores(QtWidgets.QMainWindow,Ui_MainWindow):
         self.setupUi(self)
         #Definir os forms
         self.form_Principal = formPrincipal
-        # Avoid circular import: use the login form instance from formPrincipal if provided
+        #Solução para aquele erro estranho das libaries
         self.form_Login = formPrincipal.form_Login if formPrincipal is not None else None
 
         #Definir os botões
@@ -35,15 +35,28 @@ class formUtilizadores(QtWidgets.QMainWindow,Ui_MainWindow):
     #Pesquisa e Filtros
     def LimparFiltro(self):
         self.lineEdit.setText("") 
-        #self.lineEdit.clear()
+        self.radioButton_2.setChecked(False) # Não Admin
+        self.radioButton_3.setChecked(False) # Admin
         self.ListagemUtilizadores()
 
     def ListagemUtilizadores(self):
         try:
             conn_BD = ligacao_BD()
             if conn_BD and conn_BD!=-1:
-                filtro = self.lineEdit.text()
-                if len(filtro) > 0:
+                filtro = self.lineEdit.text().strip()
+                admin_checked = self.radioButton_3.isChecked()
+                nao_admin_checked = self.radioButton_2.isChecked()
+
+                # Montar query usando apenas if statements (sem lógica dinâmica complexa)
+                if filtro and admin_checked:
+                    cmd_sql = f"SELECT id, nome, email FROM Utilizador WHERE (nome LIKE '%{filtro}%' OR email LIKE '%{filtro}%') AND admin = 1 ORDER BY nome ASC;"
+                elif filtro and nao_admin_checked:
+                    cmd_sql = f"SELECT id, nome, email FROM Utilizador WHERE (nome LIKE '%{filtro}%' OR email LIKE '%{filtro}%') AND admin = 0 ORDER BY nome ASC;"
+                elif admin_checked:
+                    cmd_sql = "SELECT id, nome, email FROM Utilizador WHERE admin = 1 ORDER BY nome ASC;"
+                elif nao_admin_checked:
+                    cmd_sql = "SELECT id, nome, email FROM Utilizador WHERE admin = 0 ORDER BY nome ASC;"
+                elif filtro:
                     cmd_sql = f"SELECT id, nome, email FROM Utilizador WHERE nome LIKE '%{filtro}%' OR email LIKE '%{filtro}%' ORDER BY nome ASC;"
                 else:
                     cmd_sql = "SELECT id, nome, email FROM Utilizador ORDER BY nome ASC;"
