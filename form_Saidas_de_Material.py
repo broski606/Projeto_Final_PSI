@@ -21,7 +21,7 @@ class formSaidasDeMaterial(QtWidgets.QMainWindow,Ui_MainWindow):
     def Voltar(self):
         self.close()
         self.form_Principal.show()
-        self.form_Principal.ListagemStock()
+        self.form_Principal.inicializar()
     
     def mostrar_form_login(self):
         self.hide()

@@ -10,8 +10,11 @@ class formLoginApp(QtWidgets.QMainWindow,Ui_MainWindow):
         super().__init__()
         self.setupUi(self)
 
+        #Variável usada para passar o email logado para outros forms
+        self.email = None
+
         #Definir os forms
-        self.form_Principal = formPrincipal(self)
+        self.form_Principal = formPrincipal(self, self.email)
         self.form_Criar_Conta = formCriarConta(self)
 
         #Definir os botões
@@ -22,7 +25,7 @@ class formLoginApp(QtWidgets.QMainWindow,Ui_MainWindow):
     def mostrar_form_Principal(self):
         self.hide()
         self.form_Principal.show()
-        self.form_Principal.ListagemStock()
+        self.form_Principal.inicializar()
     
     def mostrar_form_Criar_Conta(self):
         self.hide()
@@ -35,8 +38,8 @@ class formLoginApp(QtWidgets.QMainWindow,Ui_MainWindow):
         conn = ligacao_BD()
         try:
             email = self.lineEdit_Email.text()
-            
-            cmd_sql = f"SELECT password FROM Utilizador WHERE email = '{email}'"
+            self.email = email
+            cmd_sql = f"SELECT password, nome FROM Utilizador WHERE email = '{email}' AND ativo = 1;"
             dados = listagem_BD(conn, cmd_sql)
 
             if not dados:
@@ -44,10 +47,11 @@ class formLoginApp(QtWidgets.QMainWindow,Ui_MainWindow):
                 return
             else:
                 pw_bd = dados[0][0] #passe encriptada como vem da base de dados
+                nome_utilizador = dados[0][1] #nome do utilizador
                 pw_inserida = self.lineEdit_Palavra_Passe.text() #palavra-passe inserida pelo utilizador
                 # Verificar se a palavra-passe digitada corresponde ao hash armazenado
                 if bcrypt.checkpw(pw_inserida.encode('utf-8'), pw_bd.encode('utf-8')):
-                    QtWidgets.QMessageBox.information(self, "Info", "Login bem-sucedido!")
+                    QtWidgets.QMessageBox.information(self, "Info", f"Login bem-sucedido! Bem-vindo, {nome_utilizador}!")
                     self.mostrar_form_Principal()
                 else:
                     QtWidgets.QMessageBox.warning(self, "Aviso", "Password incorreta!")

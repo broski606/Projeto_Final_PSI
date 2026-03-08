@@ -233,4 +233,4 @@ class formCriarAlterarProduto(QtWidgets.QMainWindow,Ui_MainWindow):
     def voltar(self):
         self.close()
         self.form_Principal.show()
-        self.form_Principal.ListagemStock()
+        self.form_Principal.inicializar()
