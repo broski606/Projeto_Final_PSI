@@ -1,5 +1,6 @@
 from PyQt5 import QtWidgets
 from Interfaces.formLojas import Ui_MainWindow
+from form_CriarAlterar_Loja import formCriarAlterarLoja
 from base_dados import ligacao_BD, listagem_BD, operacao_DML
 from PyQt5.QtGui import QStandardItemModel, QStandardItem
 
@@ -9,6 +10,8 @@ class formLojas(QtWidgets.QMainWindow,Ui_MainWindow):
         self.setupUi(self)
         #Definir os forms
         self.form_Principal = formPrincipal
+        self.form_Criar_Alterar_Loja = formCriarAlterarLoja(self)
+        #Solução para aquele erro estranho das libaries
         self.form_Login = formPrincipal.form_Login if formPrincipal is not None else None
 
         #Definir os botões
@@ -17,6 +20,8 @@ class formLojas(QtWidgets.QMainWindow,Ui_MainWindow):
         self.pushButton_Desativar.clicked.connect(self.DesativarLoja)
         self.pushButton_Pesquisar.clicked.connect(self.ListagemLojas)
         self.pushButton_Limpar.clicked.connect(self.LimparFiltro)
+        self.pushButton_Alterar.clicked.connect(self.alterar)
+        self.pushButton_Criar.clicked.connect(self.novo)
         
     #Métodos
     #Mostrar Formulários
@@ -82,20 +87,20 @@ class formLojas(QtWidgets.QMainWindow,Ui_MainWindow):
             QtWidgets.QMessageBox.critical(self,"Erro",f"Ocorreu um erro:{e}")
     
     #Criar(Ainda não é para implementar) alterar(Ainda não é para implementar) e apagar(Implementar já)
-    '''def alterar(self):
+    def alterar(self):
         selecao = self.tableView.selectionModel().selectedRows()
         if not selecao:
             QtWidgets.QMessageBox.warning(self, "Aviso", "É necessário selecionar o registo a alterar!")
             return
         
         self.hide()
-        self.form_Criar_Alterar_Produto.show()
-        self.form_Criar_Alterar_Produto.inicializar(selecao, "alterar")'''
+        self.form_Criar_Alterar_Loja.show()
+        self.form_Criar_Alterar_Loja.inicializar(selecao, "alterar")
 
-    '''def novo(self):
+    def novo(self):
         self.hide()
-        self.form_Criar_Alterar_Produto.show()
-        self.form_Criar_Alterar_Produto.inicializar(None, "novo")'''
+        self.form_Criar_Alterar_Loja.show()
+        self.form_Criar_Alterar_Loja.inicializar(None, "novo")
 
     def DesativarLoja(self):
         selecionados = self.tableView.selectionModel().selectedRows()

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'formCriarAlterarLoja.ui'
+# Form implementation generated from reading ui file 'Interfaces/formCriarAlterarLoja.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.11
 #
@@ -18,7 +18,7 @@ class Ui_MainWindow(object):
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.pushButton_CriarAlterar = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton_CriarAlterar.setGeometry(QtCore.QRect(230, 480, 481, 40))
+        self.pushButton_CriarAlterar.setGeometry(QtCore.QRect(480, 480, 230, 40))
         font = QtGui.QFont()
         font.setFamily("OCR A Extended")
         font.setPointSize(10)
@@ -98,6 +98,13 @@ class Ui_MainWindow(object):
         self.lineEdit_NIF = QtWidgets.QLineEdit(self.centralwidget)
         self.lineEdit_NIF.setGeometry(QtCore.QRect(230, 240, 480, 40))
         self.lineEdit_NIF.setObjectName("lineEdit_NIF")
+        self.pushButton_Voltar = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButton_Voltar.setGeometry(QtCore.QRect(230, 480, 230, 40))
+        font = QtGui.QFont()
+        font.setFamily("OCR A Extended")
+        font.setPointSize(10)
+        self.pushButton_Voltar.setFont(font)
+        self.pushButton_Voltar.setObjectName("pushButton_Voltar")
         MainWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
@@ -118,6 +125,7 @@ class Ui_MainWindow(object):
         self.label_4.setText(_translate("MainWindow", "Morada:"))
         self.label_6.setText(_translate("MainWindow", "Telefone:"))
         self.label_7.setText(_translate("MainWindow", "Email:"))
+        self.pushButton_Voltar.setText(_translate("MainWindow", "Voltar"))
 
 
 if __name__ == "__main__":

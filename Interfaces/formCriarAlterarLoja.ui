@@ -17,9 +17,9 @@
    <widget class="QPushButton" name="pushButton_CriarAlterar">
     <property name="geometry">
      <rect>
-      <x>230</x>
+      <x>480</x>
       <y>480</y>
-      <width>481</width>
+      <width>230</width>
       <height>40</height>
      </rect>
     </property>
@@ -243,6 +243,25 @@
       <width>480</width>
       <height>40</height>
      </rect>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_Voltar">
+    <property name="geometry">
+     <rect>
+      <x>230</x>
+      <y>480</y>
+      <width>230</width>
+      <height>40</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>OCR A Extended</family>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Voltar</string>
     </property>
    </widget>
   </widget>
