@@ -55,6 +55,7 @@ class formEntradasDeMaterial(QtWidgets.QMainWindow,Ui_MainWindow):
                     cmd_sql = f"SELECT Produto.Designacao, DetalheEncomendaArmazem.Quantidade, DetalheEncomendaArmazem.precoUnitario, DetalheEncomendaArmazem.precoUnitario * DetalheEncomendaArmazem.Quantidade AS Total FROM DetalheEncomendaArmazem JOIN Produto ON Produto.id = DetalheEncomendaArmazem.idProduto WHERE nEncomendaArmazem = {nEncomendaArmazem} ORDER BY DetalheEncomendaArmazem.idProduto ASC;"
                     dados = listagem_BD(conn_BD, cmd_sql)
                     modelo = QStandardItemModel()
+                    self.tableView_2.verticalHeader().setVisible(False)
                     modelo.setHorizontalHeaderLabels(["Id. Artigo","Designação", "Quantidade", "Preço Unit.", "Total"])
                     for linha in dados:
                         modelo.appendRow([QStandardItem(str(celula) if celula is not None else "") for celula in linha])
@@ -94,6 +95,7 @@ class formEntradasDeMaterial(QtWidgets.QMainWindow,Ui_MainWindow):
                 
                 dados = listagem_BD(conn_BD, cmd_sql)
                 modelo = QStandardItemModel()
+                self.tableView.verticalHeader().setVisible(False)
                 modelo.setHorizontalHeaderLabels(["Nº Encomenda", "Utilizador", "Fornecedor", "Data Encomenda", "Data Entrega"])
                 for linha in dados:
                     modelo.appendRow([QStandardItem(str(celula) if celula is not None else "") for celula in linha])

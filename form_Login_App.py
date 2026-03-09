@@ -9,6 +9,8 @@ class formLoginApp(QtWidgets.QMainWindow,Ui_MainWindow):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
+        #Setar o lineEdit_Palavra_Passe para modo password
+        self.lineEdit_Palavra_Passe.setEchoMode(QtWidgets.QLineEdit.Password)
 
         #Variável usada para passar o email logado para outros forms
         self.email = None
