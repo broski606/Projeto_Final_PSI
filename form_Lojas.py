@@ -33,18 +33,38 @@ class formLojas(QtWidgets.QMainWindow,Ui_MainWindow):
     #Pesquisa e Filtros
     def LimparFiltro(self):
         self.lineEdit.setText("") 
-        #self.lineEdit.clear()
+        self.radioButton_2.setChecked(False)  # Fechada
+        self.radioButton_3.setChecked(False)  # Ativa
         self.ListagemLojas()
 
     def ListagemLojas(self):
         try:
             conn_BD = ligacao_BD()
             if conn_BD and conn_BD!=-1:
-                filtro = self.lineEdit.text()
-                if len(filtro) > 0:
-                    cmd_sql = f"SELECT id, nome, nif, morada, email, telefone FROM Loja WHERE nome LIKE '%{filtro}%' OR email LIKE '%{filtro}%' OR morada LIKE '%{filtro}%' OR nif LIKE '%{filtro}%' ORDER BY nome ASC;"
+                filtro = self.lineEdit.text().strip()
+                ativa_checked = self.radioButton_3.isChecked()
+                fechada_checked = self.radioButton_2.isChecked()
+
+                # Montar query usando apenas if statements
+                if filtro and ativa_checked:
+                    cmd_sql = ("SELECT id, nome, nif, morada, email, telefone FROM Loja "
+                               f"WHERE (nome LIKE '%{filtro}%' OR email LIKE '%{filtro}%' OR morada LIKE '%{filtro}%' OR nif LIKE '%{filtro}%') "
+                               "AND ativo = 1 ORDER BY nome ASC;")
+                elif filtro and fechada_checked:
+                    cmd_sql = ("SELECT id, nome, nif, morada, email, telefone FROM Loja "
+                               f"WHERE (nome LIKE '%{filtro}%' OR email LIKE '%{filtro}%' OR morada LIKE '%{filtro}%' OR nif LIKE '%{filtro}%') "
+                               "AND ativo = 0 ORDER BY nome ASC;")
+                elif ativa_checked:
+                    cmd_sql = "SELECT id, nome, nif, morada, email, telefone FROM Loja WHERE ativo = 1 ORDER BY nome ASC;"
+                elif fechada_checked:
+                    cmd_sql = "SELECT id, nome, nif, morada, email, telefone FROM Loja WHERE ativo = 0 ORDER BY nome ASC;"
+                elif filtro:
+                    cmd_sql = ("SELECT id, nome, nif, morada, email, telefone FROM Loja "
+                               f"WHERE nome LIKE '%{filtro}%' OR email LIKE '%{filtro}%' OR morada LIKE '%{filtro}%' OR nif LIKE '%{filtro}%' "
+                               "ORDER BY nome ASC;")
                 else:
                     cmd_sql = "SELECT id, nome, nif, morada, email, telefone FROM Loja WHERE ativo = 1 ORDER BY nome ASC;"
+
                 dados = listagem_BD(conn_BD, cmd_sql)
                 modelo = QStandardItemModel()
                 modelo.setHorizontalHeaderLabels(["id", "nome", "nif", "morada", "email", "telefone"])

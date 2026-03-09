@@ -39,7 +39,7 @@ class formCriarAlterarProduto(QtWidgets.QMainWindow,Ui_MainWindow):
                 preco_revenda = self.lineEdit_PrecoRevenda.text()
                 stock = self.lineEdit_Stock.text()
                 ativo = self.checkBox.isChecked()
-                if len(ide)==0 or len(categoria)==0 or len(fornecedor)==0 or len(designacao)==0 or len(preco)==0 or len(preco_revenda)==0 or len(stock)==0:
+                if len(id)==0 or len(categoria)==0 or len(fornecedor)==0 or len(designacao)==0 or len(preco)==0 or len(preco_revenda)==0 or len(stock)==0:
                     QtWidgets.QMessageBox.critical(self,"Aviso","Campos por preencher")
                     return
                 
@@ -103,10 +103,6 @@ class formCriarAlterarProduto(QtWidgets.QMainWindow,Ui_MainWindow):
                 if len(designacao)==0:
                     QtWidgets.QMessageBox.critical(self,"Aviso","Designacao do produto por preencher")
                     return
-
-                if self.designacao == designacao:
-                    QtWidgets.QMessageBox.critical(self,"Aviso","A designação do produto não foi alterada")
-                    return
                 
                 conn_BD = ligacao_BD()
                 if not conn_BD:
@@ -169,7 +165,7 @@ class formCriarAlterarProduto(QtWidgets.QMainWindow,Ui_MainWindow):
                     self.comboBox_Categoria.addItems(categorias) # Adiciona os itens ao QComboBox
                 
                 #cmd_sql = "SELECT categoria.designacao FROM artigo, categoria WHERE categoria.id = artigo.idCategoria ORDER BY categoria.designacao ASC;"
-                cmd_sql = "SELECT nome FROM Fornecedores ORDER BY designacao ASC;"
+                cmd_sql = "SELECT nome FROM Fornecedor ORDER BY nome ASC;"
                 dados = listagem_BD(conn_BD, cmd_sql)
                 if dados:
                     self.comboBox_Fornecedor.clear() # Limpa a QComboBox antes de preencher
