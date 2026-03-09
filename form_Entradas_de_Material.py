@@ -2,6 +2,7 @@ from PyQt5 import QtWidgets
 from Interfaces.formEntradasDeMaterial import Ui_MainWindow
 from PyQt5.QtGui import QStandardItemModel, QStandardItem
 from base_dados import ligacao_BD, listagem_BD, consultaUmValor, operacao_DML
+from form_CriarAlterar_Encomenda_Armazem import formCriarAlterarEncomendaArmazem
 
 class formEntradasDeMaterial(QtWidgets.QMainWindow,Ui_MainWindow):
     def __init__(self, formPrincipal):
@@ -10,12 +11,15 @@ class formEntradasDeMaterial(QtWidgets.QMainWindow,Ui_MainWindow):
         #Definir os forms
         self.form_Principal = formPrincipal
         self.form_Login = formPrincipal.form_Login if formPrincipal is not None else None
+        self.form_CriarAlterar_Encomenda_Armazem = formCriarAlterarEncomendaArmazem(self)
 
         #Definir os botões
         self.pushButton_Voltar.clicked.connect(self.Voltar)
         self.pushButton_Logout.clicked.connect(self.mostrar_form_login)
         self.pushButton_Pesquisar.clicked.connect(self.listagemEncomenda)
         self.pushButton_Limpar.clicked.connect(self.LimparFiltro)
+        self.pushButton_Criar.clicked.connect(self.criarEncomenda)
+        self.pushButton_Alterar.clicked.connect(self.alterarEncomenda)
         
     #Métodos
     def Voltar(self):
@@ -111,3 +115,17 @@ class formEntradasDeMaterial(QtWidgets.QMainWindow,Ui_MainWindow):
                 self.tableView.setEditTriggers(QtWidgets.QTableView.NoEditTriggers)
         except Exception as e:
             QtWidgets.QMessageBox.critical(self,"Erro",f"Ocorreu um erro:{e}")
+
+    def criarEncomenda(self):
+        self.hide()
+        self.form_CriarAlterar_Encomenda_Armazem.show()
+        self.form_CriarAlterar_Encomenda_Armazem.inicializar(None, "novo")
+
+    def alterarEncomenda(self):
+        selecao = self.tableView.selectionModel().selectedRows()
+        if not selecao:
+            QtWidgets.QMessageBox.warning(self, "Aviso", "Selecione uma encomenda para alterar.")
+            return
+        self.hide()
+        self.form_CriarAlterar_Encomenda_Armazem.show()
+        self.form_CriarAlterar_Encomenda_Armazem.inicializar(selecao, "alterar")

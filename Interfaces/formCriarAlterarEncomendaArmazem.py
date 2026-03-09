@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'Interfaces/formEntradasDeMaterial.ui'
+# Form implementation generated from reading ui file 'Interfaces/formCriarAlterarEncomendaArmazem.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.11
 #
@@ -23,7 +23,7 @@ class Ui_MainWindow(object):
         font.setFamily("OCR A Extended")
         font.setPointSize(22)
         self.label_titulo.setFont(font)
-        self.label_titulo.setAlignment(QtCore.Qt.Qt::AlignmentFlag::AlignCenter)
+        #self.label_titulo.setAlignment(QtCore.Qt.Qt::AlignmentFlag::AlignCenter)
         self.label_titulo.setObjectName("label_titulo")
         self.groupBox_Catalogo = QtWidgets.QGroupBox(self.centralwidget)
         self.groupBox_Catalogo.setGeometry(QtCore.QRect(20, 80, 520, 550))
@@ -90,6 +90,11 @@ class Ui_MainWindow(object):
         self.pushButton_Remover.setText(_translate("MainWindow", "Remover Artigo Selecionado"))
         self.pushButton_Voltar.setText(_translate("MainWindow", "Voltar"))
         self.pushButton_Concluir.setText(_translate("MainWindow", "Concluir a encomenda"))
+
+        # Adicionar comboBox para fornecedor
+        self.comboBox_Fornecedor = QtWidgets.QComboBox(self.groupBox_Catalogo)
+        self.comboBox_Fornecedor.setGeometry(QtCore.QRect(170, 470, 100, 35))
+        self.comboBox_Fornecedor.setObjectName("comboBox_Fornecedor")
 
 
 if __name__ == "__main__":

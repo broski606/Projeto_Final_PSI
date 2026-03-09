@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'Interfaces/formEntradasDeMaterial.ui'
+# Form implementation generated from reading ui file 'Interfaces/formCriarAlterarEncomendaLoja.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.11
 #
@@ -23,7 +23,7 @@ class Ui_MainWindow(object):
         font.setFamily("OCR A Extended")
         font.setPointSize(22)
         self.label_titulo.setFont(font)
-        self.label_titulo.setAlignment(QtCore.Qt.Qt::AlignmentFlag::AlignCenter)
+        #self.label_titulo.setAlignment(QtCore.Qt.Qt::AlignmentFlag::AlignCenter)
         self.label_titulo.setObjectName("label_titulo")
         self.groupBox_Catalogo = QtWidgets.QGroupBox(self.centralwidget)
         self.groupBox_Catalogo.setGeometry(QtCore.QRect(20, 80, 520, 550))
@@ -71,6 +71,12 @@ class Ui_MainWindow(object):
         font.setPointSize(11)
         self.pushButton_Concluir.setFont(font)
         self.pushButton_Concluir.setObjectName("pushButton_Concluir")
+        self.comboBox = QtWidgets.QComboBox(self.centralwidget)
+        self.comboBox.setGeometry(QtCore.QRect(380, 660, 160, 40))
+        self.comboBox.setObjectName("comboBox")
+        self.label = QtWidgets.QLabel(self.centralwidget)
+        self.label.setGeometry(QtCore.QRect(270, 660, 100, 40))
+        self.label.setObjectName("label")
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
@@ -79,7 +85,7 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "Encomenda Armazém - Gestão de Itens"))
-        self.label_titulo.setText(_translate("MainWindow", "Registar Encomenda Armazém"))
+        self.label_titulo.setText(_translate("MainWindow", "Registar Encomenda Loja"))
         self.groupBox_Catalogo.setTitle(_translate("MainWindow", "1. Selecionar Produtos (Catálogo)"))
         self.lineEdit_Pesquisar.setPlaceholderText(_translate("MainWindow", "Pesquisar nome..."))
         self.pushButton_Pesquisar.setText(_translate("MainWindow", "Buscar"))
@@ -90,6 +96,7 @@ class Ui_MainWindow(object):
         self.pushButton_Remover.setText(_translate("MainWindow", "Remover Artigo Selecionado"))
         self.pushButton_Voltar.setText(_translate("MainWindow", "Voltar"))
         self.pushButton_Concluir.setText(_translate("MainWindow", "Concluir a encomenda"))
+        self.label.setText(_translate("MainWindow", "Loja de destino:"))
 
 
 if __name__ == "__main__":
