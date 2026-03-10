@@ -76,9 +76,9 @@ class formEntradasDeMaterial(QtWidgets.QMainWindow,Ui_MainWindow):
             if conn_BD and conn_BD!=-1:
                 filtro = self.lineEdit.text()
                 if len(filtro) > 0:
-                    cmd_sql = f"SELECT nEncomendaArmazem, Utilizador.nome, Fornecedor.nome, dataEncomenda, dataEntrega FROM EncomendaArmazem, Utilizador, Fornecedor WHERE EncomendaArmazem.idUtilizador = Utilizador.id AND EncomendaArmazem.idFornecedor = Fornecedor.id AND (Utilizador.nome LIKE '%{filtro}%' OR Fornecedor.nome LIKE '%{filtro}%') AND EncomendaArmazem.ativo = 1 ORDER BY EncomendaArmazem.dataEncomenda DESC;"
+                    cmd_sql = f"SELECT nEncomendaArmazem, Utilizador.nome, dataEncomenda, dataEntrega FROM EncomendaArmazem JOIN Utilizador ON EncomendaArmazem.idUtilizador = Utilizador.id WHERE Utilizador.nome LIKE '%{filtro}%' AND EncomendaArmazem.ativo = 1 ORDER BY EncomendaArmazem.dataEncomenda DESC;"
                 else:
-                    cmd_sql = "SELECT nEncomendaArmazem, Utilizador.nome, Fornecedor.nome, dataEncomenda, dataEntrega FROM EncomendaArmazem, Utilizador, Fornecedor WHERE EncomendaArmazem.idUtilizador = Utilizador.id AND EncomendaArmazem.idFornecedor = Fornecedor.id AND EncomendaArmazem.ativo = 1 ORDER BY EncomendaArmazem.dataEncomenda DESC;"
+                    cmd_sql = "SELECT nEncomendaArmazem, Utilizador.nome, dataEncomenda, dataEntrega FROM EncomendaArmazem JOIN Utilizador ON EncomendaArmazem.idUtilizador = Utilizador.id WHERE EncomendaArmazem.ativo = 1 ORDER BY EncomendaArmazem.dataEncomenda DESC;"
                 #if len(filtro) == 0 and self.radioButton.isChecked() == False and self.radioButton_2.isChecked() == False: #Cábula: radioButton1 - Entregues e radioButton2 - Por entregar
                 #    cmd_sql = f"SELECT encomenda.nEncomendaArmazem, CONCAT(cliente.id, '-', cliente.nome), dataEncomenda, dataEntrega FROM encomenda, cliente WHERE encomenda.idCliente = cliente.id ORDER BY encomenda.dataEncomenda DESC;"
                 #
@@ -100,7 +100,7 @@ class formEntradasDeMaterial(QtWidgets.QMainWindow,Ui_MainWindow):
                 dados = listagem_BD(conn_BD, cmd_sql)
                 modelo = QStandardItemModel()
                 self.tableView.verticalHeader().setVisible(False)
-                modelo.setHorizontalHeaderLabels(["Nº Encomenda", "Utilizador", "Fornecedor", "Data Encomenda", "Data Entrega"])
+                modelo.setHorizontalHeaderLabels(["Nº Encomenda", "Utilizador", "Data Encomenda", "Data Entrega"])
                 for linha in dados:
                     modelo.appendRow([QStandardItem(str(celula) if celula is not None else "") for celula in linha])
                 self.tableView.setModel(modelo)

@@ -91,11 +91,6 @@ class Ui_MainWindow(object):
         self.pushButton_Voltar.setText(_translate("MainWindow", "Voltar"))
         self.pushButton_Concluir.setText(_translate("MainWindow", "Concluir a encomenda"))
 
-        # Adicionar comboBox para fornecedor
-        self.comboBox_Fornecedor = QtWidgets.QComboBox(self.groupBox_Catalogo)
-        self.comboBox_Fornecedor.setGeometry(QtCore.QRect(170, 470, 100, 35))
-        self.comboBox_Fornecedor.setObjectName("comboBox_Fornecedor")
-
 
 if __name__ == "__main__":
     import sys

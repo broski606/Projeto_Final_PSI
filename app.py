@@ -1,3 +1,4 @@
+import mysql.connector
 from PyQt5 import QtWidgets
 import sys
 from form_Login_App import formLoginApp

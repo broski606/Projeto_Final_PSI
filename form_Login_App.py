@@ -54,6 +54,8 @@ class formLoginApp(QtWidgets.QMainWindow,Ui_MainWindow):
                 # Verificar se a palavra-passe digitada corresponde ao hash armazenado
                 if bcrypt.checkpw(pw_inserida.encode('utf-8'), pw_bd.encode('utf-8')):
                     QtWidgets.QMessageBox.information(self, "Info", f"Login bem-sucedido! Bem-vindo, {nome_utilizador}!")
+                    # Atualizar o email no formPrincipal para evitar FK inválido ao criar encomendas
+                    self.form_Principal.email = email
                     self.mostrar_form_Principal()
                 else:
                     QtWidgets.QMessageBox.warning(self, "Aviso", "Password incorreta!")

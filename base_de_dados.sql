@@ -54,12 +54,10 @@ CREATE TABLE Produto (
 CREATE TABLE EncomendaArmazem (
     nEncomendaArmazem INT PRIMARY KEY AUTO_INCREMENT,
     idUtilizador INT NOT NULL,
-    idFornecedor INT NOT NULL,
     dataEncomenda DATE NOT NULL,
     dataEntrega DATE NULL,
     ativo BOOLEAN NOT NULL DEFAULT TRUE,
-    FOREIGN KEY (idUtilizador) REFERENCES Utilizador(id),
-    FOREIGN KEY (idFornecedor) REFERENCES Fornecedor(id)
+    FOREIGN KEY (idUtilizador) REFERENCES Utilizador(id)
 )engine=innodb;
 
 CREATE TABLE DetalheEncomendaArmazem (
@@ -112,9 +110,9 @@ INSERT INTO Produto (idCategoria, idFornecedor, designacao, preco, precoRevenda,
 (2, 2, 'Cesto de Transporte', 50.00, 70.00, 20),
 (3, 1, 'Vacina Antiparasitária', 20.00, 30.00, 50);
 
-INSERT INTO EncomendaArmazem (idUtilizador, idFornecedor, dataEncomenda, dataEntrega) VALUES 
-(1, 1, '2023-01-01', '2023-01-05'),
-(2, 2, '2023-02-01', NULL);
+INSERT INTO EncomendaArmazem (idUtilizador, dataEncomenda, dataEntrega) VALUES 
+(1, '2023-01-01', '2023-01-05'),
+(2, '2023-02-01', NULL);
 
 INSERT INTO DetalheEncomendaArmazem (nEncomendaArmazem, idProduto, quantidade, precoUnitario) VALUES 
 (1, 1, 10, 10.00),
