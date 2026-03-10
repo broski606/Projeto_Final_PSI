@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '.\formPrincipal.ui'
+# Form implementation generated from reading ui file '.\Interfaces\formPrincipal.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.11
 #
@@ -133,12 +133,6 @@ class Ui_MainWindow(object):
         self.tableView = QtWidgets.QTableView(self.centralwidget)
         self.tableView.setGeometry(QtCore.QRect(230, 190, 541, 370))
         self.tableView.setObjectName("tableView")
-        self.label_3 = QtWidgets.QLabel(self.centralwidget)
-        self.label_3.setGeometry(QtCore.QRect(20, 500, 170, 50))
-        self.label_3.setText("")
-        self.label_3.setPixmap(QtGui.QPixmap(".\\Imagens/barra.jpg"))
-        self.label_3.setScaledContents(True)
-        self.label_3.setObjectName("label_3")
         self.pushButton_Utilizadores = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_Utilizadores.setGeometry(QtCore.QRect(20, 150, 170, 50))
         font = QtGui.QFont()
@@ -181,6 +175,13 @@ class Ui_MainWindow(object):
         font.setPointSize(10)
         self.pushButton_Novo.setFont(font)
         self.pushButton_Novo.setObjectName("pushButton_Novo")
+        self.pushButton_Categorias = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButton_Categorias.setGeometry(QtCore.QRect(20, 500, 170, 50))
+        font = QtGui.QFont()
+        font.setFamily("OCR A Extended")
+        font.setPointSize(10)
+        self.pushButton_Categorias.setFont(font)
+        self.pushButton_Categorias.setObjectName("pushButton_Categorias")
         MainWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
@@ -209,6 +210,7 @@ class Ui_MainWindow(object):
         self.pushButton_Alterar.setText(_translate("MainWindow", "Alterar"))
         self.pushButton_Desativar.setText(_translate("MainWindow", "Desativar"))
         self.pushButton_Novo.setText(_translate("MainWindow", "Novo"))
+        self.pushButton_Categorias.setText(_translate("MainWindow", "Categorias"))
 
 
 if __name__ == "__main__":

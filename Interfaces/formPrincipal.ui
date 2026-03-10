@@ -320,25 +320,6 @@
      </rect>
     </property>
    </widget>
-   <widget class="QLabel" name="label_3">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>500</y>
-      <width>170</width>
-      <height>50</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-    <property name="pixmap">
-     <pixmap>Imagens/barra.jpg</pixmap>
-    </property>
-    <property name="scaledContents">
-     <bool>true</bool>
-    </property>
-   </widget>
    <widget class="QPushButton" name="pushButton_Utilizadores">
     <property name="geometry">
      <rect>
@@ -451,6 +432,25 @@
     </property>
     <property name="text">
      <string>Novo</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_Categorias">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>500</y>
+      <width>170</width>
+      <height>50</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>OCR A Extended</family>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Categorias</string>
     </property>
    </widget>
   </widget>
