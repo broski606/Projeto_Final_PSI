@@ -64,8 +64,8 @@ class formCriarAlterarEncomendaArmazem(QtWidgets.QMainWindow, Ui_MainWindow):
                         self.comboBox_CategoriaFiltro.addItems(categorias)
 
                     # Carregar detalhes no carrinho
-                    cmd_sql = "SELECT idProduto, Produto.designacao, quantidade, precoUnitario FROM DetalheEncomendaArmazem JOIN Produto ON Produto.id = DetalheEncomendaArmazem.idProduto WHERE nEncomendaArmazem = %s;"
-                    dados = listagem_BD(conn_BD, cmd_sql, (self.nEncomenda_alterar,))
+                    cmd_sql = f"SELECT idProduto, Produto.designacao, quantidade, precoUnitario FROM DetalheEncomendaArmazem JOIN Produto ON Produto.id = DetalheEncomendaArmazem.idProduto WHERE nEncomendaArmazem = {self.nEncomenda_alterar};"
+                    dados = listagem_BD(conn_BD, cmd_sql)
                     self.carrinho = [{'idProduto': linha[0], 'designacao': linha[1], 'quantidade': linha[2], 'precoUnitario': linha[3]} for linha in dados]
                     self.atualizar_carrinho()
                     self.listar_produtos()
@@ -125,7 +125,6 @@ class formCriarAlterarEncomendaArmazem(QtWidgets.QMainWindow, Ui_MainWindow):
         designacao = modelo.data(modelo.index(linha, 1))
         preco = float(modelo.data(modelo.index(linha, 4)))
 
-        # Verificar se já está no carrinho
         for item in self.carrinho:
             if item['idProduto'] == id_produto:
                 item['quantidade'] += quantidade
@@ -213,6 +212,14 @@ class formCriarAlterarEncomendaArmazem(QtWidgets.QMainWindow, Ui_MainWindow):
             except Exception as e:
                 QtWidgets.QMessageBox.critical(self, "Erro", f"Ocorreu um erro: {e}")
         elif self.modo_funcionamento == "alterar":
+            conn_BD = ligacao_BD()
+            if conn_BD and conn_BD != -1:
+                cmd_sql = "SELECT dataEntrega FROM EncomendaArmazem WHERE nEncomendaArmazem = %s;"
+                data_entrega = consultaUmValor(conn_BD, cmd_sql, (self.nEncomenda_alterar,))
+                if data_entrega is not None:
+                    QtWidgets.QMessageBox.warning(self, "Aviso", "Não é possível alterar uma encomenda já entregue.")
+                    return
+
             if not self.carrinho:
                 QtWidgets.QMessageBox.warning(self, "Aviso", "O carrinho está vazio.")
                 return
@@ -220,11 +227,9 @@ class formCriarAlterarEncomendaArmazem(QtWidgets.QMainWindow, Ui_MainWindow):
             try:
                 conn_BD = ligacao_BD()
                 if conn_BD and conn_BD != -1:
-                    # Deletar detalhes antigos
                     cmd_sql = "DELETE FROM DetalheEncomendaArmazem WHERE nEncomendaArmazem = %s;"
                     operacao_DML(conn_BD, cmd_sql, (self.nEncomenda_alterar,))
 
-                    # Inserir novos detalhes
                     for item in self.carrinho:
                         cmd_sql = "INSERT INTO DetalheEncomendaArmazem (nEncomendaArmazem, idProduto, quantidade, precoUnitario) VALUES (%s, %s, %s, %s);"
                         operacao_DML(conn_BD, cmd_sql, (self.nEncomenda_alterar, item['idProduto'], item['quantidade'], item['precoUnitario']))

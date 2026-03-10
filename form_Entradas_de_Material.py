@@ -20,6 +20,7 @@ class formEntradasDeMaterial(QtWidgets.QMainWindow,Ui_MainWindow):
         self.pushButton_Limpar.clicked.connect(self.LimparFiltro)
         self.pushButton_Criar.clicked.connect(self.criarEncomenda)
         self.pushButton_Alterar.clicked.connect(self.alterarEncomenda)
+        self.pushButton_Cancelar.clicked.connect(self.cancelar_encomenda)
         
     #Métodos
     def Voltar(self):
@@ -35,16 +36,7 @@ class formEntradasDeMaterial(QtWidgets.QMainWindow,Ui_MainWindow):
     #Listagens e Filtros
     def LimparFiltro(self):
         self.lineEdit.setText("")
-
-        #self.radioButton.setAutoExclusive(False)
-        #self.radioButton_2.setAutoExclusive(False)
-        #
-        #self.radioButton.setChecked(False)
-        #self.radioButton_2.setChecked(False)
-        #
-        #self.radioButton.setAutoExclusive(True)
-        #self.radioButton_2.setAutoExclusive(True)
-
+        self.radioButton.setChecked(True)
         self.listagemEncomenda()
     
     def listagemDetalhesEncomenda(self, selecao):
@@ -56,7 +48,8 @@ class formEntradasDeMaterial(QtWidgets.QMainWindow,Ui_MainWindow):
                     linha = selecao[0].row() # primeira linha selecionada
                     modelo = self.tableView.model()
                     nEncomendaArmazem = modelo.data(modelo.index(linha, 0)) # Primeiro item da linha (identificador)
-                    cmd_sql = f"SELECT Produto.Designacao, DetalheEncomendaArmazem.Quantidade, DetalheEncomendaArmazem.precoUnitario, DetalheEncomendaArmazem.precoUnitario * DetalheEncomendaArmazem.Quantidade AS Total FROM DetalheEncomendaArmazem JOIN Produto ON Produto.id = DetalheEncomendaArmazem.idProduto WHERE nEncomendaArmazem = {nEncomendaArmazem} ORDER BY DetalheEncomendaArmazem.idProduto ASC;"
+                    # incluir id para alinhar corretamente as colunas
+                    cmd_sql = f"SELECT Produto.id, Produto.Designacao, DetalheEncomendaArmazem.Quantidade, DetalheEncomendaArmazem.precoUnitario, DetalheEncomendaArmazem.precoUnitario * DetalheEncomendaArmazem.Quantidade AS Total FROM DetalheEncomendaArmazem JOIN Produto ON Produto.id = DetalheEncomendaArmazem.idProduto WHERE nEncomendaArmazem = {nEncomendaArmazem} ORDER BY DetalheEncomendaArmazem.idProduto ASC;"
                     dados = listagem_BD(conn_BD, cmd_sql)
                     modelo = QStandardItemModel()
                     self.tableView_2.verticalHeader().setVisible(False)
@@ -74,28 +67,30 @@ class formEntradasDeMaterial(QtWidgets.QMainWindow,Ui_MainWindow):
         try:
             conn_BD = ligacao_BD()
             if conn_BD and conn_BD!=-1:
-                filtro = self.lineEdit.text()
-                if len(filtro) > 0:
-                    cmd_sql = f"SELECT nEncomendaArmazem, Utilizador.nome, dataEncomenda, dataEntrega FROM EncomendaArmazem JOIN Utilizador ON EncomendaArmazem.idUtilizador = Utilizador.id WHERE Utilizador.nome LIKE '%{filtro}%' AND EncomendaArmazem.ativo = 1 ORDER BY EncomendaArmazem.dataEncomenda DESC;"
+                filtro = self.lineEdit.text().strip()
+                todos = self.radioButton.isChecked()
+                entregues = self.radioButton_3.isChecked()
+                por_entregar = self.radioButton_4.isChecked()
+                canceladas = self.radioButton_2.isChecked()
+
+                # montar condições
+                # mostrar canceladas ou activas conforme checkbox
+                if canceladas:
+                    wheres = ["EncomendaArmazem.ativo = 0"]
                 else:
-                    cmd_sql = "SELECT nEncomendaArmazem, Utilizador.nome, dataEncomenda, dataEntrega FROM EncomendaArmazem JOIN Utilizador ON EncomendaArmazem.idUtilizador = Utilizador.id WHERE EncomendaArmazem.ativo = 1 ORDER BY EncomendaArmazem.dataEncomenda DESC;"
-                #if len(filtro) == 0 and self.radioButton.isChecked() == False and self.radioButton_2.isChecked() == False: #Cábula: radioButton1 - Entregues e radioButton2 - Por entregar
-                #    cmd_sql = f"SELECT encomenda.nEncomendaArmazem, CONCAT(cliente.id, '-', cliente.nome), dataEncomenda, dataEntrega FROM encomenda, cliente WHERE encomenda.idCliente = cliente.id ORDER BY encomenda.dataEncomenda DESC;"
-                #
-                #elif len(filtro) > 0 and self.radioButton.isChecked() == False and self.radioButton_2.isChecked() == False:
-                #    cmd_sql = f"SELECT encomenda.nEncomendaArmazem, CONCAT(cliente.id, '-', cliente.nome), dataEncomenda, dataEntrega FROM encomenda, cliente WHERE encomenda.idCliente = cliente.id AND cliente.nome LIKE '%{filtro}%' ORDER BY encomenda.dataEncomenda DESC;"
-                #
-                #elif len(filtro) > 0 and self.radioButton.isChecked() == True and self.radioButton_2.isChecked() == False:
-                #    cmd_sql = f"SELECT encomenda.nEncomendaArmazem, CONCAT(cliente.id, '-', cliente.nome), dataEncomenda, dataEntrega FROM encomenda, cliente WHERE encomenda.idCliente = cliente.id AND cliente.nome LIKE '%{filtro}%' AND encomenda.dataEntrega IS NOT NULL ORDER BY encomenda.dataEncomenda DESC;"
-                #
-                #elif len(filtro) > 0 and self.radioButton.isChecked() == False and self.radioButton_2.isChecked() == True:
-                #    cmd_sql = f"SELECT encomenda.nEncomendaArmazem, CONCAT(cliente.id, '-', cliente.nome), dataEncomenda, dataEntrega FROM encomenda, cliente WHERE encomenda.idCliente = cliente.id AND cliente.nome LIKE '%{filtro}%' AND encomenda.dataEntrega IS NULL ORDER BY encomenda.dataEncomenda DESC;"
-                #
-                #elif len(filtro) == 0 and self.radioButton.isChecked() == True and self.radioButton_2.isChecked() == False:
-                #    cmd_sql = f"SELECT encomenda.nEncomendaArmazem, CONCAT(cliente.id, '-', cliente.nome), dataEncomenda, dataEntrega FROM encomenda, cliente WHERE encomenda.idCliente = cliente.id AND encomenda.dataEntrega IS NOT NULL ORDER BY encomenda.dataEncomenda DESC;"
-                #
-                #elif len(filtro) == 0 and self.radioButton.isChecked() == False and self.radioButton_2.isChecked() == True:
-                #    cmd_sql = f"SELECT encomenda.nEncomendaArmazem, CONCAT(cliente.id, '-', cliente.nome), dataEncomenda, dataEntrega FROM encomenda, cliente WHERE encomenda.idCliente = cliente.id AND encomenda.dataEntrega IS NULL ORDER BY encomenda.dataEncomenda DESC;"
+                    wheres = ["EncomendaArmazem.ativo = 1"]
+
+                if filtro:
+                    wheres.append(f"Utilizador.nome LIKE '%{filtro}%'" )
+                # entrega só quando não estiver em 'todos'
+                if not todos:
+                    if entregues and not por_entregar:
+                        wheres.append("dataEntrega IS NOT NULL")
+                    elif por_entregar and not entregues:
+                        wheres.append("dataEntrega IS NULL")
+
+                where_sql = " AND ".join(wheres)
+                cmd_sql = f"SELECT nEncomendaArmazem, Utilizador.nome, dataEncomenda, dataEntrega FROM EncomendaArmazem JOIN Utilizador ON EncomendaArmazem.idUtilizador = Utilizador.id WHERE {where_sql} ORDER BY EncomendaArmazem.dataEncomenda DESC;"
                 
                 dados = listagem_BD(conn_BD, cmd_sql)
                 modelo = QStandardItemModel()
@@ -129,3 +124,41 @@ class formEntradasDeMaterial(QtWidgets.QMainWindow,Ui_MainWindow):
         self.hide()
         self.form_CriarAlterar_Encomenda_Armazem.show()
         self.form_CriarAlterar_Encomenda_Armazem.inicializar(selecao, "alterar")
+
+    def cancelar_encomenda(self):
+        selecao = self.tableView.selectionModel().selectedRows()
+        if not selecao:
+            QtWidgets.QMessageBox.warning(self, "Aviso", "Selecione uma encomenda para cancelar.")
+            return
+
+        linha = selecao[0].row()
+        modelo = self.tableView.model()
+        n_encomenda = modelo.data(modelo.index(linha, 0))
+
+        try:
+            conn_BD = ligacao_BD()
+            if conn_BD and conn_BD != -1:
+                # Verificar se a encomenda já foi entregue
+                cmd_sql = "SELECT dataEntrega FROM EncomendaArmazem WHERE nEncomendaArmazem = %s;"
+                data_entrega = consultaUmValor(conn_BD, cmd_sql, (n_encomenda,))
+                if data_entrega is not None:
+                    QtWidgets.QMessageBox.warning(self, "Aviso", "Não é possível cancelar uma encomenda já entregue.")
+                    return
+
+                resposta = QtWidgets.QMessageBox.question(
+                    self,
+                    "Questão",
+                    f"Tem certeza de que deseja cancelar a encomenda {n_encomenda}?"
+                )
+                if resposta == QtWidgets.QMessageBox.Yes:
+                    cmd_sql = "UPDATE EncomendaArmazem SET ativo = 0 WHERE nEncomendaArmazem = %s;"
+                    num_registos = operacao_DML(conn_BD, cmd_sql, (n_encomenda,))
+                    if num_registos > 0:
+                        QtWidgets.QMessageBox.information(self, "Sucesso", "A encomenda foi cancelada com sucesso!")
+                        self.listagemEncomenda()
+                    else:
+                        QtWidgets.QMessageBox.warning(self, "Aviso", "Nenhum registo foi alterado!")
+                else:
+                    QtWidgets.QMessageBox.warning(self, "Aviso", "O cancelamento da encomenda foi cancelado!")
+        except Exception as e:
+            QtWidgets.QMessageBox.critical(self, "Erro", f"Ocorreu um erro: {e}")
