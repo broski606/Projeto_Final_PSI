@@ -129,6 +129,13 @@ class Ui_MainWindow(object):
         font.setPointSize(10)
         self.radioButton.setFont(font)
         self.radioButton.setObjectName("radioButton")
+        self.pushButton_Entregue = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButton_Entregue.setGeometry(QtCore.QRect(540, 90, 100, 30))
+        font = QtGui.QFont()
+        font.setFamily("OCR A Extended")
+        font.setPointSize(10)
+        self.pushButton_Entregue.setFont(font)
+        self.pushButton_Entregue.setObjectName("pushButton_Entregue")
         MainWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
@@ -152,6 +159,7 @@ class Ui_MainWindow(object):
         self.radioButton_4.setText(_translate("MainWindow", "Não Entregue"))
         self.pushButton_Criar.setText(_translate("MainWindow", "Criar"))
         self.radioButton.setText(_translate("MainWindow", "Todas"))
+        self.pushButton_Entregue.setText(_translate("MainWindow", "Entregue"))
 
 
 if __name__ == "__main__":

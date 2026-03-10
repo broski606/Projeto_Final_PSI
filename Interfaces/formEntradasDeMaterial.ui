@@ -317,6 +317,25 @@
      <string>Todas</string>
     </property>
    </widget>
+   <widget class="QPushButton" name="pushButton_Entregue">
+    <property name="geometry">
+     <rect>
+      <x>540</x>
+      <y>90</y>
+      <width>100</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>OCR A Extended</family>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Entregue</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>

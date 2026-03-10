@@ -100,7 +100,7 @@
       <x>10</x>
       <y>140</y>
       <width>780</width>
-      <height>10</height>
+      <height>3</height>
      </rect>
     </property>
     <property name="orientation">
@@ -129,8 +129,8 @@
    <widget class="QRadioButton" name="radioButton_2">
     <property name="geometry">
      <rect>
-      <x>480</x>
-      <y>60</y>
+      <x>550</x>
+      <y>100</y>
       <width>161</width>
       <height>30</height>
      </rect>
@@ -142,14 +142,14 @@
      </font>
     </property>
     <property name="text">
-     <string>Cancelada</string>
+     <string>Inativo</string>
     </property>
    </widget>
    <widget class="QRadioButton" name="radioButton_3">
     <property name="geometry">
      <rect>
-      <x>210</x>
-      <y>60</y>
+      <x>550</x>
+      <y>70</y>
       <width>121</width>
       <height>30</height>
      </rect>
@@ -161,7 +161,7 @@
      </font>
     </property>
     <property name="text">
-     <string>Entregue</string>
+     <string>Ativo</string>
     </property>
    </widget>
    <widget class="QTableView" name="tableView">
@@ -170,7 +170,7 @@
       <x>20</x>
       <y>160</y>
       <width>760</width>
-      <height>190</height>
+      <height>391</height>
      </rect>
     </property>
    </widget>
@@ -197,7 +197,7 @@
     <property name="geometry">
      <rect>
       <x>210</x>
-      <y>90</y>
+      <y>80</y>
       <width>100</width>
       <height>30</height>
      </rect>
@@ -212,11 +212,11 @@
      <string>Alterar</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_Cancelar">
+   <widget class="QPushButton" name="pushButton_Desativar">
     <property name="geometry">
      <rect>
       <x>320</x>
-      <y>90</y>
+      <y>80</y>
       <width>100</width>
       <height>30</height>
      </rect>
@@ -228,62 +228,14 @@
      </font>
     </property>
     <property name="text">
-     <string>Cancelar</string>
-    </property>
-   </widget>
-   <widget class="QGroupBox" name="groupBox">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>360</y>
-      <width>761</width>
-      <height>201</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>OCR A Extended</family>
-      <pointsize>10</pointsize>
-     </font>
-    </property>
-    <property name="title">
-     <string>Detalhes:</string>
-    </property>
-    <widget class="QTableView" name="tableView_2">
-     <property name="geometry">
-      <rect>
-       <x>20</x>
-       <y>20</y>
-       <width>721</width>
-       <height>170</height>
-      </rect>
-     </property>
-    </widget>
-   </widget>
-   <widget class="QRadioButton" name="radioButton_4">
-    <property name="geometry">
-     <rect>
-      <x>330</x>
-      <y>60</y>
-      <width>121</width>
-      <height>30</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>OCR A Extended</family>
-      <pointsize>10</pointsize>
-     </font>
-    </property>
-    <property name="text">
-     <string>Não Entregue</string>
+     <string>Desativar</string>
     </property>
    </widget>
    <widget class="QPushButton" name="pushButton_Criar">
     <property name="geometry">
      <rect>
       <x>430</x>
-      <y>90</y>
+      <y>80</y>
       <width>100</width>
       <height>30</height>
      </rect>
@@ -296,44 +248,6 @@
     </property>
     <property name="text">
      <string>Criar</string>
-    </property>
-   </widget>
-   <widget class="QRadioButton" name="radioButton">
-    <property name="geometry">
-     <rect>
-      <x>590</x>
-      <y>60</y>
-      <width>161</width>
-      <height>30</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>OCR A Extended</family>
-      <pointsize>10</pointsize>
-     </font>
-    </property>
-    <property name="text">
-     <string>Todas</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pushButton_Entregue">
-    <property name="geometry">
-     <rect>
-      <x>540</x>
-      <y>90</y>
-      <width>100</width>
-      <height>30</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>OCR A Extended</family>
-      <pointsize>10</pointsize>
-     </font>
-    </property>
-    <property name="text">
-     <string>Entregue</string>
     </property>
    </widget>
   </widget>
