@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'formEntradasDeMaterial.ui'
+# Form implementation generated from reading ui file '.\Interfaces\formEntradasDeMaterial.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.11
 #
@@ -122,6 +122,13 @@ class Ui_MainWindow(object):
         font.setPointSize(10)
         self.pushButton_Criar.setFont(font)
         self.pushButton_Criar.setObjectName("pushButton_Criar")
+        self.radioButton = QtWidgets.QRadioButton(self.centralwidget)
+        self.radioButton.setGeometry(QtCore.QRect(570, 60, 161, 30))
+        font = QtGui.QFont()
+        font.setFamily("OCR A Extended")
+        font.setPointSize(10)
+        self.radioButton.setFont(font)
+        self.radioButton.setObjectName("radioButton")
         MainWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
@@ -144,6 +151,7 @@ class Ui_MainWindow(object):
         self.groupBox.setTitle(_translate("MainWindow", "Detalhes:"))
         self.radioButton_4.setText(_translate("MainWindow", "Não Entregue"))
         self.pushButton_Criar.setText(_translate("MainWindow", "Criar"))
+        self.radioButton.setText(_translate("MainWindow", "Todas"))
 
 
 if __name__ == "__main__":
