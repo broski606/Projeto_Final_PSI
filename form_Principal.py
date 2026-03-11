@@ -92,6 +92,8 @@ class formPrincipal(QtWidgets.QMainWindow,Ui_MainWindow):
 
     def mostrar_form_Utilizadores(self):
         self.hide()
+        # comunicar ao formulário de utilizadores se o user corrente é administrador
+        self.form_Utilizadores.configurar_permissao(self.admin)
         self.form_Utilizadores.show()
         self.form_Utilizadores.ListagemUtilizadores()
 
