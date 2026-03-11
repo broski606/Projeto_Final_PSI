@@ -35,6 +35,12 @@ class formSaidasDeMaterial(QtWidgets.QMainWindow,Ui_MainWindow):
             pass
         
     #Métodos
+    def gerar_PDF(self, n_encomenda):
+        # abrir o PDF da fatura correspondente à encomenda de loja
+        import webbrowser
+        url = f"http://localhost/Projeto_Final_PSI/php/gerarPDF.php?tipo=loja&n={n_encomenda}"
+        webbrowser.open(url)
+    
     def Voltar(self):
         self.close()
         self.form_Principal.show()
@@ -188,6 +194,11 @@ class formSaidasDeMaterial(QtWidgets.QMainWindow,Ui_MainWindow):
                     for id_prod, qt in detalhes:
                         operacao_DML(conn_BD, "UPDATE Produto SET stock = stock - %s WHERE id = %s;", (qt, id_prod))
                     QtWidgets.QMessageBox.information(self,"Sucesso","Encomenda marcada como entregue!")
+                    # gerar fatura em PDF
+                    try:
+                        self.gerar_PDF(n_encomenda)
+                    except Exception:
+                        pass
                     self.listagemEncomenda()
                 else:
                     QtWidgets.QMessageBox.warning(self,"Aviso","Nenhum registo foi alterado!")
