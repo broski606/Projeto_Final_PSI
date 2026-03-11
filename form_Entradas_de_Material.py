@@ -170,6 +170,13 @@ class formEntradasDeMaterial(QtWidgets.QMainWindow,Ui_MainWindow):
                 cmd_sql = "UPDATE EncomendaArmazem SET dataEntrega = %s WHERE nEncomendaArmazem = %s;"
                 num = operacao_DML(conn_BD, cmd_sql, (now, n_encomenda))
                 if num > 0:
+                    # incrementar stock dos produtos da encomenda
+                    cursor = conn_BD.cursor()
+                    cursor.execute("SELECT idProduto, quantidade FROM DetalheEncomendaArmazem WHERE nEncomendaArmazem = %s;", (n_encomenda,))
+                    detalhes = cursor.fetchall()
+                    cursor.close()
+                    for id_prod, qt in detalhes:
+                        operacao_DML(conn_BD, "UPDATE Produto SET stock = stock + %s WHERE id = %s;", (qt, id_prod))
                     QtWidgets.QMessageBox.information(self,"Sucesso","Encomenda marcada como entregue!")
                     self.listagemEncomenda()
                 else:

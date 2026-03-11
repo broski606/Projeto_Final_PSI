@@ -169,6 +169,24 @@ class formSaidasDeMaterial(QtWidgets.QMainWindow,Ui_MainWindow):
                 cmd_sql = "UPDATE EncomendaLoja SET dataEntrega = %s WHERE nEncomendaLoja = %s;"
                 num = operacao_DML(conn_BD, cmd_sql, (now, n_encomenda))
                 if num > 0:
+                    # diminuir stock dos produtos da encomenda, verificando disponibilidade
+                    cursor = conn_BD.cursor()
+                    cursor.execute("SELECT idProduto, quantidade FROM DetalheEncomendaLoja WHERE nEncomendaLoja = %s;", (n_encomenda,))
+                    detalhes = cursor.fetchall()
+                    cursor.close()
+                    insuficiencia = []
+                    for id_prod, qt in detalhes:
+                        atual = consultaUmValor(conn_BD, "SELECT stock FROM Produto WHERE id = %s;", (id_prod,))
+                        if atual is not None and atual < qt:
+                            insuficiencia.append((id_prod, atual, qt))
+                    if insuficiencia:
+                        msg = "Stock insuficiente para os seguintes artigos:\n"
+                        for idp, atual, neces in insuficiencia:
+                            msg += f"produto {idp}: atual {atual}, pedido {neces}\n"
+                        QtWidgets.QMessageBox.warning(self, "Aviso", msg)
+                        return
+                    for id_prod, qt in detalhes:
+                        operacao_DML(conn_BD, "UPDATE Produto SET stock = stock - %s WHERE id = %s;", (qt, id_prod))
                     QtWidgets.QMessageBox.information(self,"Sucesso","Encomenda marcada como entregue!")
                     self.listagemEncomenda()
                 else:
