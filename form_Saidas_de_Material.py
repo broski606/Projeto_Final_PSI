@@ -1,4 +1,4 @@
-from PyQt5 import QtWidgets
+from PyQt5 import QtWidgets, QtCore
 from Interfaces.formSaidasDeMaterial import Ui_MainWindow
 from PyQt5.QtGui import QStandardItemModel, QStandardItem
 from base_dados import ligacao_BD, listagem_BD, consultaUmValor, operacao_DML
@@ -25,6 +25,12 @@ class formSaidasDeMaterial(QtWidgets.QMainWindow,Ui_MainWindow):
         # adicionar botão cancelar caso exista
         try:
             self.pushButton_Cancelar.clicked.connect(self.cancelar_encomenda)
+        except Exception:
+            pass
+        # botão entregar
+        try:
+            self.pushButton_Entregue.clicked.connect(self.marcar_entregue)
+            self.pushButton_Entregue.setEnabled(False)
         except Exception:
             pass
         
@@ -103,6 +109,10 @@ class formSaidasDeMaterial(QtWidgets.QMainWindow,Ui_MainWindow):
 
                 #Chamar a atualização dos detalhes da encomenda
                 self.tableView.selectionModel().selectionChanged.connect(self.listagemDetalhesEncomenda)
+                # atualizar estado do botão entregar
+                self.tableView.selectionModel().selectionChanged.connect(self.atualizar_estado_entrega)
+                # atualizar estado de imediato
+                self.atualizar_estado_entrega()
                 
                 self.tableView.resizeColumnsToContents()
                 # Selecionar apenas linhas inteiras
@@ -111,7 +121,60 @@ class formSaidasDeMaterial(QtWidgets.QMainWindow,Ui_MainWindow):
                 self.tableView.setEditTriggers(QtWidgets.QTableView.NoEditTriggers)
         except Exception as e:
             QtWidgets.QMessageBox.critical(self,"Erro",f"Ocorreu um erro:{e}")
+    def atualizar_estado_entrega(self):
+        selecionados = self.tableView.selectionModel().selectedRows()
+        habilita = False
+        if selecionados:
+            linha = selecionados[0].row()
+            modelo = self.tableView.model()
+            n = modelo.data(modelo.index(linha,0))
+            conn_BD = ligacao_BD()
+            if conn_BD and conn_BD != -1:
+                cursor = conn_BD.cursor()
+                cursor.execute("SELECT dataEntrega, ativo FROM EncomendaLoja WHERE nEncomendaLoja = %s;", (n,))
+                row = cursor.fetchone()
+                cursor.close()
+                if row:
+                    dataEntrega, ativo = row
+                    habilita = (dataEntrega is None and ativo == 1)
+        try:
+            self.pushButton_Entregue.setEnabled(habilita)
+        except AttributeError:
+            pass
 
+    def marcar_entregue(self):
+        selecionados = self.tableView.selectionModel().selectedRows()
+        if not selecionados:
+            QtWidgets.QMessageBox.warning(self, "Aviso", "Selecione uma encomenda para marcar como entregue.")
+            return
+        linha = selecionados[0].row()
+        modelo = self.tableView.model()
+        n_encomenda = modelo.data(modelo.index(linha,0))
+        try:
+            conn_BD = ligacao_BD()
+            if conn_BD and conn_BD != -1:
+                cursor = conn_BD.cursor()
+                cursor.execute("SELECT dataEntrega, ativo FROM EncomendaLoja WHERE nEncomendaLoja = %s;", (n_encomenda,))
+                row = cursor.fetchone()
+                cursor.close()
+                if row:
+                    dataEntrega, ativo = row
+                    if ativo == 0:
+                        QtWidgets.QMessageBox.warning(self,"Aviso","Não é possível marcar uma encomenda cancelada como entregue.")
+                        return
+                    if dataEntrega is not None:
+                        QtWidgets.QMessageBox.information(self,"Info","A encomenda já se encontra entregue.")
+                        return
+                now = QtCore.QDateTime.currentDateTime().toString('yyyy-MM-dd HH:mm:ss')
+                cmd_sql = "UPDATE EncomendaLoja SET dataEntrega = %s WHERE nEncomendaLoja = %s;"
+                num = operacao_DML(conn_BD, cmd_sql, (now, n_encomenda))
+                if num > 0:
+                    QtWidgets.QMessageBox.information(self,"Sucesso","Encomenda marcada como entregue!")
+                    self.listagemEncomenda()
+                else:
+                    QtWidgets.QMessageBox.warning(self,"Aviso","Nenhum registo foi alterado!")
+        except Exception as e:
+            QtWidgets.QMessageBox.critical(self,"Erro",f"Ocorreu um erro: {e}")
     def listagemDetalhesEncomenda(self, selecao):
         try:
             conn_BD = ligacao_BD()
