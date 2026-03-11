@@ -15,11 +15,11 @@ $dados .= "</style>";
 $dados .= "</head>";
 $dados .= "<body>";
 
-include 'liga_BD.php';
-// lembrete con é a cena que vem do liga_BD.php
-if (!isset($con) || !$con) {
-    die("Não foi possível estabelecer ligação à base de dados.");
+if (empty($tipo) || $n <= 0) {
+    die("Parâmetros inválidos");
 }
+
+include 'liga_BD.php';
 
 // query da encomenda
 if ($tipo === 'armazem') {
@@ -88,12 +88,23 @@ $dados .= "</body></html>";
 
 // gerar PDF com Dompdf
 use Dompdf\Dompdf;
-require './dompdf/autoload.inc.php';
-$dompdf = new Dompdf();
-$dompdf->loadHtml($dados);
-$dompdf->set_option('defaultFont','DejaVu Sans');
-$dompdf->setPaper('A4','portrait');
-$dompdf->render();
-$filename = 'fatura_' . $tipo . '_' . $n . '.pdf';
-$dompdf->stream($filename);
+$dompdfPath = __DIR__ . '/dompdf/autoload.inc.php';
+if (!file_exists($dompdfPath)) {
+    die("Erro: Biblioteca Dompdf não encontrada");
+}
+require $dompdfPath;
+
+try {
+    $dompdf = new Dompdf();
+    $dompdf->loadHtml($dados);
+    $dompdf->set_option('defaultFont', 'DejaVu Sans');
+    $dompdf->set_option('isHtml5ParserEnabled', true);
+    $dompdf->setPaper('A4', 'portrait');
+    $dompdf->render();
+    
+    $filename = 'fatura_' . htmlspecialchars($tipo) . '_' . intval($n) . '.pdf';
+    $dompdf->stream($filename, ['Attachment' => true]);
+} catch (Exception $e) {
+    die("Erro ao gerar PDF: " . htmlspecialchars($e->getMessage()));
+}
 ?>

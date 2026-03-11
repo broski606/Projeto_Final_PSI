@@ -90,3 +90,6 @@ CREATE TABLE DetalheEncomendaLoja (
     FOREIGN KEY (nEncomendaLoja) REFERENCES EncomendaLoja(nEncomendaLoja),
     FOREIGN KEY (idProduto) REFERENCES Produto(id)
 )engine=innodb;
+
+INSERT INTO utilizador (nome, email, password, admin) VALUES 
+('Admin', 'admin@columbofilia.pt', '$2b$12$L5sGSFi.349RNBZJK/op7.UWBAcnFck6KMRjVh1lfMIZohTc3huny', 1); --- Palavra passe: inicio.1234

@@ -32,7 +32,7 @@ class formEntradasDeMaterial(QtWidgets.QMainWindow,Ui_MainWindow):
     def gerar_PDF(self, n_encomenda):
         # abrir o PDF da fatura correspondente à encomenda de armazém
         import webbrowser
-        url = f"http://localhost/Projeto_Final_PSI/php/gerarPDF.php?tipo=armazem&n={n_encomenda}"
+        url = f"http://localhost/gerarPDF.php?tipo=armazem&n={n_encomenda}"
         webbrowser.open(url)
 
     def Voltar(self):
