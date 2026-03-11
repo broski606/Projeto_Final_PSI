@@ -7,6 +7,7 @@ from form_Fornecedores import formFornecedores
 from form_Entradas_de_Material import formEntradasDeMaterial
 from form_Saidas_de_Material import formSaidasDeMaterial
 from form_CriarAlterar_Produto import formCriarAlterarProduto
+from form_Categorias import formCategorias
 from base_dados import ligacao_BD, listagem_BD, consultaUmValor, operacao_DML
 
 class formPrincipal(QtWidgets.QMainWindow,Ui_MainWindow):
@@ -24,6 +25,7 @@ class formPrincipal(QtWidgets.QMainWindow,Ui_MainWindow):
         self.form_Fornecedores = formFornecedores(self)
         self.form_Entradas_de_Material = formEntradasDeMaterial(self)
         self.form_Saidas_de_Material = formSaidasDeMaterial(self)
+        self.form_Categorias = formCategorias(self)
         self.form_Criar_Alterar_Produto = formCriarAlterarProduto(self)
 
         #Definir os botões
@@ -39,6 +41,7 @@ class formPrincipal(QtWidgets.QMainWindow,Ui_MainWindow):
         self.pushButton_Utilizadores.clicked.connect(self.mostrar_form_Utilizadores)
         self.pushButton_Lojas.clicked.connect(self.mostrar_form_Lojas)
         self.pushButton_Fornercedores.clicked.connect(self.mostrar_form_Fornecedores)
+        self.pushButton_Categorias.clicked.connect(self.mostrar_form_Categorias)
         self.pushButton_Entradas_de_Material.clicked.connect(self.mostrar_form_Entradas_de_Material)
         self.pushButton_Saidas_de_Material.clicked.connect(self.mostrar_form_Saidas_de_Material)
         
@@ -106,6 +109,11 @@ class formPrincipal(QtWidgets.QMainWindow,Ui_MainWindow):
         self.hide()
         self.form_Entradas_de_Material.show()
         self.form_Entradas_de_Material.listagemEncomenda()
+
+    def mostrar_form_Categorias(self):
+        self.hide()
+        self.form_Categorias.show()
+        self.form_Categorias.ListagemCategorias()
 
     def mostrar_form_Saidas_de_Material(self):
         self.hide()
