@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'Interfaces/formCriarAlterarProduto.ui'
+# Form implementation generated from reading ui file '.\formCriarAlterarProduto.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.11
 #
@@ -25,7 +25,7 @@ class Ui_MainWindow(object):
         self.pushButton_Voltar.setFont(font)
         self.pushButton_Voltar.setObjectName("pushButton_Voltar")
         self.label_5 = QtWidgets.QLabel(self.centralwidget)
-        self.label_5.setGeometry(QtCore.QRect(210, 10, 390, 50))
+        self.label_5.setGeometry(QtCore.QRect(150, 10, 501, 50))
         font = QtGui.QFont()
         font.setFamily("OCR A Extended")
         font.setPointSize(26)
