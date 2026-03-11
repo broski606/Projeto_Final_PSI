@@ -110,13 +110,8 @@ class formCriarAlterarProduto(QtWidgets.QMainWindow,Ui_MainWindow):
                     return
                 cmd_sql = f"SELECT COUNT(*) FROM Produto WHERE id = %s;"
                 numRegistosId = consultaUmValor(conn_BD, cmd_sql, (id,))
-                cmd_sql = f"SELECT COUNT(*) FROM Produto WHERE designacao = %s;"
-                numRegistosD = consultaUmValor(conn_BD, cmd_sql, (designacao,))
-                if numRegistosId == -1 or numRegistosD == -1:
+                if numRegistosId == -1:
                     QtWidgets.QMessageBox.critical(self,"Erro","Ocorreu um erro ao verificar a existência do artigo")
-                    return
-                elif numRegistosD > 0:
-                    QtWidgets.QMessageBox.critical(self,"Aviso", f"Já existe um produto com a designação {designacao} ou com id {id} introduzidos")
                     return
                 elif numRegistosId==0:
                     QtWidgets.QMessageBox.critical(self,"Aviso", f"Não foi possível encontrar o produto com identificador {id}!")

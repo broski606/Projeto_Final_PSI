@@ -116,7 +116,7 @@ class formPrincipal(QtWidgets.QMainWindow,Ui_MainWindow):
 
         # Limpar filtros adicionais
         self.radioButton_2.setChecked(False)
-        self.radioButton_3.setChecked(False)
+        self.radioButton_3.setChecked(True)
 
         # Usar primeiro item do combobox (deve ser "Todas" / "Todos")
         if self.comboBox_Categoria.count() > 0:

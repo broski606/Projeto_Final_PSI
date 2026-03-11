@@ -1,5 +1,6 @@
 from PyQt5 import QtWidgets
 from Interfaces.formFornecedores import Ui_MainWindow
+from form_CriarAlterar_Fornecedor import formCriarAlterarFornecedor
 from base_dados import ligacao_BD, listagem_BD, consultaUmValor, operacao_DML
 from PyQt5.QtGui import QStandardItemModel, QStandardItem
 
@@ -10,13 +11,16 @@ class formFornecedores(QtWidgets.QMainWindow,Ui_MainWindow):
         #Definir os forms
         self.form_Principal = formPrincipal
         self.form_Login = formPrincipal.form_Login if formPrincipal is not None else None
+        self.form_Criar_Alterar_Fornecedor = formCriarAlterarFornecedor(self)
 
         #Definir os botões
         self.pushButton_Voltar.clicked.connect(self.Voltar)
         self.pushButton_Logout.clicked.connect(self.mostrar_form_login)
-        self.pushButton_Desativar.clicked.connect(self.DesativarProduto)
+        self.pushButton_Desativar.clicked.connect(self.DesativarFornecedor)
         self.pushButton_Pesquisar.clicked.connect(self.ListagemFornecedores)
         self.pushButton_Limpar.clicked.connect(self.LimparFiltro)
+        self.pushButton_Alterar.clicked.connect(self.alterar)
+        self.pushButton_Criar.clicked.connect(self.novo)
 
     #Métodos
     #Mostar Formulários
@@ -33,18 +37,32 @@ class formFornecedores(QtWidgets.QMainWindow,Ui_MainWindow):
     #Pesquisa e Filtros
     def LimparFiltro(self):
         self.lineEdit.setText("") 
-        #self.lineEdit.clear()
+        self.radioButton_2.setChecked(False)  # Inativo
+        self.radioButton_3.setChecked(True)  # Ativo
         self.ListagemFornecedores()
 
     def ListagemFornecedores(self):
         try:
             conn_BD = ligacao_BD()
             if conn_BD and conn_BD!=-1:
-                filtro = self.lineEdit.text()
-                if len(filtro) > 0:
-                    cmd_sql = f"SELECT id, nome, nif, morada, telefone, email FROM Fornecedor WHERE nome LIKE '%{filtro}%' OR email LIKE '%{filtro}%' OR morada LIKE '%{filtro}%' OR NIF LIKE '%{filtro}%' ORDER BY nome ASC;"
+                filtro = self.lineEdit.text().strip()
+                ativo_checked = self.radioButton_3.isChecked()
+                inativo_checked = self.radioButton_2.isChecked()
+
+                # Montar query usando apenas if statements (sem lógica dinâmica complexa)
+                if filtro and ativo_checked:
+                    cmd_sql = f"SELECT id, nome, nif, morada, telefone, email FROM Fornecedor WHERE (nome LIKE '%{filtro}%' OR email LIKE '%{filtro}%' OR morada LIKE '%{filtro}%' OR nif LIKE '%{filtro}%') AND ativo = 1 ORDER BY nome ASC;"
+                elif filtro and inativo_checked:
+                    cmd_sql = f"SELECT id, nome, nif, morada, telefone, email FROM Fornecedor WHERE (nome LIKE '%{filtro}%' OR email LIKE '%{filtro}%' OR morada LIKE '%{filtro}%' OR nif LIKE '%{filtro}%') AND ativo = 0 ORDER BY nome ASC;"
+                elif ativo_checked:
+                    cmd_sql = "SELECT id, nome, nif, morada, telefone, email FROM Fornecedor WHERE ativo = 1 ORDER BY nome ASC;"
+                elif inativo_checked:
+                    cmd_sql = "SELECT id, nome, nif, morada, telefone, email FROM Fornecedor WHERE ativo = 0 ORDER BY nome ASC;"
+                elif filtro:
+                    cmd_sql = f"SELECT id, nome, nif, morada, telefone, email FROM Fornecedor WHERE nome LIKE '%{filtro}%' OR email LIKE '%{filtro}%' OR morada LIKE '%{filtro}%' OR nif LIKE '%{filtro}%' ORDER BY nome ASC;"
                 else:
-                    cmd_sql = "SELECT id, nome, nif, morada, telefone, email FROM Fornecedor ORDER BY nome ASC;"
+                    cmd_sql = "SELECT id, nome, nif, morada, telefone, email FROM Fornecedor WHERE ativo = 1 ORDER BY nome ASC;"
+
                 dados = listagem_BD(conn_BD, cmd_sql)
                 modelo = QStandardItemModel()
                 modelo.setHorizontalHeaderLabels(["id", "nome", "nif", "morada", "telefone", "email"])
@@ -61,23 +79,23 @@ class formFornecedores(QtWidgets.QMainWindow,Ui_MainWindow):
         except Exception as e:
             QtWidgets.QMessageBox.critical(self,"Erro",f"Ocorreu um erro:{e}")
 
-    #Criar(Ainda não é para implementar) alterar(Ainda não é para implementar) e apagar(Implementar já)
-    '''def alterar(self):
+    # Criar / Alterar / Desativar
+    def alterar(self):
         selecao = self.tableView.selectionModel().selectedRows()
         if not selecao:
             QtWidgets.QMessageBox.warning(self, "Aviso", "É necessário selecionar o registo a alterar!")
             return
-        
-        self.hide()
-        self.form_Criar_Alterar_Produto.show()
-        self.form_Criar_Alterar_Produto.inicializar(selecao, "alterar")'''
 
-    '''def novo(self):
         self.hide()
-        self.form_Criar_Alterar_Produto.show()
-        self.form_Criar_Alterar_Produto.inicializar(None, "novo")'''
+        self.form_Criar_Alterar_Fornecedor.show()
+        self.form_Criar_Alterar_Fornecedor.inicializar(selecao, "alterar")
 
-    def DesativarProduto(self):
+    def novo(self):
+        self.hide()
+        self.form_Criar_Alterar_Fornecedor.show()
+        self.form_Criar_Alterar_Fornecedor.inicializar(None, "novo")
+
+    def DesativarFornecedor(self):
         selecionados = self.tableView.selectionModel().selectedRows()
         if selecionados:
             linha = selecionados[0].row() # primeira linha selecionada
