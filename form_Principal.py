@@ -10,11 +10,12 @@ from form_CriarAlterar_Produto import formCriarAlterarProduto
 from base_dados import ligacao_BD, listagem_BD, consultaUmValor, operacao_DML
 
 class formPrincipal(QtWidgets.QMainWindow,Ui_MainWindow):
-    def __init__(self, formLogin, email = None):
+    def __init__(self, formLogin):
         super().__init__()
         self.setupUi(self)
         #Variáveis
-        self.email = email
+        self.email = None
+        self.admin = None
 
         #Definir os forms
         self.form_Login = formLogin
@@ -63,7 +64,7 @@ class formPrincipal(QtWidgets.QMainWindow,Ui_MainWindow):
                 fornecedores = [str(linha[0]) for linha in dados]
                 self.comboBox_Fornecedor.addItems(fornecedores)
         self.ListagemStock()
-    #Verificar
+    #Verificar se é admin ou não
     def es_administrador(self):
         try:
             conn_BD = ligacao_BD()
@@ -71,12 +72,13 @@ class formPrincipal(QtWidgets.QMainWindow,Ui_MainWindow):
             admin = consultaUmValor(conn_BD, cmd_sql, (self.email,))
             if admin == 1:
                 print("O utilizador é administrador.")
-                return True
+                self.admin = True
             else:
-                return False
+                self.admin = False
                 print("O utilizador não é administrador.")
         except Exception as e:
             QtWidgets.QMessageBox.critical(self,"Erro",f"Ocorreu um erro:{e}")
+            self.admin = False
             return False
 
     #Mostrar forms

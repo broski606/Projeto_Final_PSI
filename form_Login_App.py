@@ -16,7 +16,7 @@ class formLoginApp(QtWidgets.QMainWindow,Ui_MainWindow):
         self.email = None
 
         #Definir os forms
-        self.form_Principal = formPrincipal(self, self.email)
+        self.form_Principal = formPrincipal(self)
         self.form_Criar_Conta = formCriarConta(self)
 
         #Definir os botões
@@ -27,6 +27,8 @@ class formLoginApp(QtWidgets.QMainWindow,Ui_MainWindow):
     def mostrar_form_Principal(self):
         self.hide()
         self.form_Principal.show()
+        self.form_Principal.email = self.email
+        self.form_Principal.es_administrador()
         self.form_Principal.inicializar()
     
     def mostrar_form_Criar_Conta(self):
