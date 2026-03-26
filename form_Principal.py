@@ -79,6 +79,14 @@ class formPrincipal(QtWidgets.QMainWindow,Ui_MainWindow):
             else:
                 self.admin = False
                 print("O utilizador não é administrador.")
+                
+            #Mudar o texto "Utilizador" para o nome do utilizador logado
+            cmd_sql = "SELECT nome FROM Utilizador WHERE email = %s AND ativo = 1;"
+            nome_utilizador = consultaUmValor(conn_BD, cmd_sql, (self.email,))
+            if nome_utilizador:
+                self.label_4.setText(f"Utilizador: {nome_utilizador}")
+            else:
+                self.label_4.setText("Utilizador: Desconhecido")
         except Exception as e:
             QtWidgets.QMessageBox.critical(self,"Erro",f"Ocorreu um erro:{e}")
             self.admin = False

@@ -72,7 +72,7 @@ class formLojas(QtWidgets.QMainWindow,Ui_MainWindow):
 
                 dados = listagem_BD(conn_BD, cmd_sql)
                 modelo = QStandardItemModel()
-                modelo.setHorizontalHeaderLabels(["id", "nome", "nif", "morada", "email", "telefone"])
+                modelo.setHorizontalHeaderLabels(["Id", "Nome", "NIF", "Morada", "Email", "Telefone"])
                 for linha in dados:
                     modelo.appendRow([QStandardItem(str(celula) if celula is not None else "") for celula in linha])
                 self.tableView.setModel(modelo)

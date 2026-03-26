@@ -76,7 +76,7 @@ class formCategorias(QtWidgets.QMainWindow, Ui_MainWindow):
 
                 dados = listagem_BD(conn_BD, cmd_sql)
                 modelo = QStandardItemModel()
-                modelo.setHorizontalHeaderLabels(["id", "designacao"])
+                modelo.setHorizontalHeaderLabels(["Id", "Designação"])
                 for linha in dados:
                     modelo.appendRow([QStandardItem(str(celula) if celula is not None else "") for celula in linha])
                 self.tableView.setModel(modelo)
