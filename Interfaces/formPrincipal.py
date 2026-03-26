@@ -206,7 +206,7 @@ class Ui_MainWindow(object):
         self.label_2.setText(_translate("MainWindow", "Categoria:"))
         self.pushButton_Utilizadores.setText(_translate("MainWindow", "Utilizadores"))
         self.label_4.setText(_translate("MainWindow", "Esta página é:"))
-        self.label_5.setText(_translate("MainWindow", "Página Principal"))
+        self.label_5.setText(_translate("MainWindow", "Listagem de Produtos"))
         self.pushButton_Alterar.setText(_translate("MainWindow", "Alterar"))
         self.pushButton_Desativar.setText(_translate("MainWindow", "Desativar"))
         self.pushButton_Novo.setText(_translate("MainWindow", "Novo"))
