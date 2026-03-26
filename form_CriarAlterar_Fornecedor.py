@@ -2,7 +2,7 @@ from PyQt5 import QtWidgets
 from PyQt5.QtGui import QStandardItemModel, QStandardItem
 from Interfaces.formCriarAlterarFornecedor import Ui_MainWindow
 from base_dados import ligacao_BD, listagem_BD, consultaUmValor, operacao_DML
-from funcoes_gerais import verificar_tipo_dados
+from funcoes_gerais import verificar_tipo_dados, validar_email, validar_telefone, validar_nif, validar_campos_obrigatorios
 
 
 class formCriarAlterarFornecedor(QtWidgets.QMainWindow, Ui_MainWindow):
@@ -37,13 +37,42 @@ class formCriarAlterarFornecedor(QtWidgets.QMainWindow, Ui_MainWindow):
                 telefone = self.lineEdit_Telefone.text()
                 ativo = self.checkBox.isChecked()
 
-                if len(id) == 0 or len(nome) == 0 or len(nif) == 0 or len(morada) == 0 or len(email) == 0 or len(telefone) == 0:
-                    QtWidgets.QMessageBox.critical(self, "Aviso", "Campos por preencher")
+                # Validar campos obrigatórios
+                campos = {
+                    "ID": id,
+                    "Nome": nome,
+                    "NIF": nif,
+                    "Morada": morada,
+                    "Email": email,
+                    "Telefone": telefone
+                }
+                validos, mensagem = validar_campos_obrigatorios(campos)
+                if not validos:
+                    QtWidgets.QMessageBox.critical(self, "Aviso", mensagem)
                     return
 
+                # Validar tipo de dados do ID
                 tipoDados_id = verificar_tipo_dados(id)
                 if tipoDados_id != "inteiro":
                     QtWidgets.QMessageBox.critical(self, "Aviso", "Inserir valor inteiro no campo id")
+                    return
+
+                # Validar NIF
+                valido_nif, mensagem_nif = validar_nif(nif)
+                if not valido_nif:
+                    QtWidgets.QMessageBox.critical(self, "Aviso", mensagem_nif)
+                    return
+
+                # Validar Email
+                valido_email, mensagem_email = validar_email(email)
+                if not valido_email:
+                    QtWidgets.QMessageBox.critical(self, "Aviso", mensagem_email)
+                    return
+
+                # Validar Telefone
+                valido_telefone, mensagem_telefone = validar_telefone(telefone)
+                if not valido_telefone:
+                    QtWidgets.QMessageBox.critical(self, "Aviso", mensagem_telefone)
                     return
 
                 conn_BD = ligacao_BD()
@@ -93,8 +122,35 @@ class formCriarAlterarFornecedor(QtWidgets.QMainWindow, Ui_MainWindow):
                 telefone = self.lineEdit_Telefone.text()
                 ativo = self.checkBox.isChecked()
 
-                if len(nome) == 0:
-                    QtWidgets.QMessageBox.critical(self, "Aviso", "Nome do fornecedor por preencher")
+                # Validar campos obrigatórios
+                campos = {
+                    "Nome": nome,
+                    "NIF": nif,
+                    "Morada": morada,
+                    "Email": email,
+                    "Telefone": telefone
+                }
+                validos, mensagem = validar_campos_obrigatorios(campos)
+                if not validos:
+                    QtWidgets.QMessageBox.critical(self, "Aviso", mensagem)
+                    return
+
+                # Validar NIF
+                valido_nif, mensagem_nif = validar_nif(nif)
+                if not valido_nif:
+                    QtWidgets.QMessageBox.critical(self, "Aviso", mensagem_nif)
+                    return
+
+                # Validar Email
+                valido_email, mensagem_email = validar_email(email)
+                if not valido_email:
+                    QtWidgets.QMessageBox.critical(self, "Aviso", mensagem_email)
+                    return
+
+                # Validar Telefone
+                valido_telefone, mensagem_telefone = validar_telefone(telefone)
+                if not valido_telefone:
+                    QtWidgets.QMessageBox.critical(self, "Aviso", mensagem_telefone)
                     return
 
                 conn_BD = ligacao_BD()
