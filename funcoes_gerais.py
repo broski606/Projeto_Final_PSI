@@ -66,6 +66,55 @@ def validar_nif(nif):
     return True, ""
 
 
+def validar_numero_inteiro(valor, nome_campo="valor"):
+    """
+    Valida se um valor é um número inteiro válido.
+    Retorna: (True, "") se válido, (False, mensagem_erro) se inválido
+    """
+    if not valor or len(str(valor).strip()) == 0:
+        return False, f"{nome_campo} não pode estar vazio"
+    
+    try:
+        int(valor)
+        valor_int = int(valor)
+        if valor_int < 0:
+            return False, f"{nome_campo} não pode ser negativo"
+        return True, ""
+    except ValueError:
+        return False, f"{nome_campo} deve ser um número inteiro válido"
+
+
+def validar_numero_decimal(valor, nome_campo="valor"):
+    """
+    Valida se um valor é um número decimal/float válido.
+    Retorna: (True, "") se válido, (False, mensagem_erro) se inválido
+    """
+    if not valor or len(str(valor).strip()) == 0:
+        return False, f"{nome_campo} não pode estar vazio"
+    
+    try:
+        valor_decimal = float(valor)
+        if valor_decimal < 0:
+            return False, f"{nome_campo} não pode ser negativo"
+        return True, ""
+    except ValueError:
+        return False, f"{nome_campo} deve ser um número válido"
+
+
+def validar_designacao(designacao):
+    """
+    Valida se uma designação é válida.
+    Retorna: (True, "") se válido, (False, mensagem_erro) se inválido
+    """
+    if not designacao or len(designacao.strip()) == 0:
+        return False, "Designação não pode estar vazia"
+    
+    if len(designacao.strip()) < 3:
+        return False, "Designação deve ter pelo menos 3 caracteres"
+    
+    return True, ""
+
+
 def validar_campos_obrigatorios(campos_dict):
     """
     Valida múltiplos campos obrigatórios.

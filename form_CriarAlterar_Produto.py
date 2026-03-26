@@ -3,7 +3,7 @@ from PyQt5.QtGui import QStandardItemModel, QStandardItem
 #from Interfaces.formDetalhesArtigo import Ui_Form
 from Interfaces.formCriarAlterarProduto import Ui_MainWindow
 from base_dados import ligacao_BD, listagem_BD, consultaUmValor, operacao_DML
-from funcoes_gerais import verificar_tipo_dados
+from funcoes_gerais import verificar_tipo_dados, validar_designacao, validar_numero_inteiro, validar_numero_decimal, validar_campos_obrigatorios
 
 
 class formCriarAlterarProduto(QtWidgets.QMainWindow,Ui_MainWindow):
@@ -39,13 +39,50 @@ class formCriarAlterarProduto(QtWidgets.QMainWindow,Ui_MainWindow):
                 preco_revenda = self.lineEdit_PrecoRevenda.text()
                 stock = self.lineEdit_Stock.text()
                 ativo = self.checkBox.isChecked()
-                if len(id)==0 or len(categoria)==0 or len(fornecedor)==0 or len(designacao)==0 or len(preco)==0 or len(preco_revenda)==0 or len(stock)==0:
-                    QtWidgets.QMessageBox.critical(self,"Aviso","Campos por preencher")
+
+                # Validar campos obrigatórios
+                campos = {
+                    "ID": id,
+                    "Categoria": categoria,
+                    "Fornecedor": fornecedor,
+                    "Designação": designacao,
+                    "Preço": preco,
+                    "Preço Revenda": preco_revenda,
+                    "Stock": stock
+                }
+                validos, mensagem = validar_campos_obrigatorios(campos)
+                if not validos:
+                    QtWidgets.QMessageBox.critical(self, "Aviso", mensagem)
                     return
-                
+
+                # Validar tipo de dados do ID
                 tipoDados_id = verificar_tipo_dados(id)
                 if tipoDados_id != "inteiro":
-                    QtWidgets.QMessageBox.critical(self,"Aviso","Inserir valor inteiro no campo id")
+                    QtWidgets.QMessageBox.critical(self, "Aviso", "Inserir valor inteiro no campo id")
+                    return
+
+                # Validar designação
+                valido_designacao, mensagem_designacao = validar_designacao(designacao)
+                if not valido_designacao:
+                    QtWidgets.QMessageBox.critical(self, "Aviso", mensagem_designacao)
+                    return
+
+                # Validar preço
+                valido_preco, mensagem_preco = validar_numero_decimal(preco, "Preço")
+                if not valido_preco:
+                    QtWidgets.QMessageBox.critical(self, "Aviso", mensagem_preco)
+                    return
+
+                # Validar preço revenda
+                valido_preco_revenda, mensagem_preco_revenda = validar_numero_decimal(preco_revenda, "Preço Revenda")
+                if not valido_preco_revenda:
+                    QtWidgets.QMessageBox.critical(self, "Aviso", mensagem_preco_revenda)
+                    return
+
+                # Validar stock
+                valido_stock, mensagem_stock = validar_numero_inteiro(stock, "Stock")
+                if not valido_stock:
+                    QtWidgets.QMessageBox.critical(self, "Aviso", mensagem_stock)
                     return
                 
                 conn_BD = ligacao_BD()
@@ -99,9 +136,43 @@ class formCriarAlterarProduto(QtWidgets.QMainWindow,Ui_MainWindow):
                 preco_revenda = self.lineEdit_PrecoRevenda.text()
                 stock = self.lineEdit_Stock.text()
                 ativo = self.checkBox.isChecked()
-                
-                if len(designacao)==0:
-                    QtWidgets.QMessageBox.critical(self,"Aviso","Designacao do produto por preencher")
+
+                # Validar campos obrigatórios
+                campos = {
+                    "Categoria": categoria,
+                    "Fornecedor": fornecedor,
+                    "Designação": designacao,
+                    "Preço": preco,
+                    "Preço Revenda": preco_revenda,
+                    "Stock": stock
+                }
+                validos, mensagem = validar_campos_obrigatorios(campos)
+                if not validos:
+                    QtWidgets.QMessageBox.critical(self, "Aviso", mensagem)
+                    return
+
+                # Validar designação
+                valido_designacao, mensagem_designacao = validar_designacao(designacao)
+                if not valido_designacao:
+                    QtWidgets.QMessageBox.critical(self, "Aviso", mensagem_designacao)
+                    return
+
+                # Validar preço
+                valido_preco, mensagem_preco = validar_numero_decimal(preco, "Preço")
+                if not valido_preco:
+                    QtWidgets.QMessageBox.critical(self, "Aviso", mensagem_preco)
+                    return
+
+                # Validar preço revenda
+                valido_preco_revenda, mensagem_preco_revenda = validar_numero_decimal(preco_revenda, "Preço Revenda")
+                if not valido_preco_revenda:
+                    QtWidgets.QMessageBox.critical(self, "Aviso", mensagem_preco_revenda)
+                    return
+
+                # Validar stock
+                valido_stock, mensagem_stock = validar_numero_inteiro(stock, "Stock")
+                if not valido_stock:
+                    QtWidgets.QMessageBox.critical(self, "Aviso", mensagem_stock)
                     return
                 
                 conn_BD = ligacao_BD()
