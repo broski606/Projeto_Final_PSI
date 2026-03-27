@@ -9,6 +9,8 @@ class formCriarAlterarUtilizador(QtWidgets.QMainWindow, Ui_MainWindow):
     def __init__(self, formUtilizadores):
         super().__init__()
         self.setupUi(self)
+        #self.lineEdit_Palavra_Passe.setEchoMode(QtWidgets.QLineEdit.Password)
+        self.lineEdit_PalavraPasse.setEchoMode(QtWidgets.QLineEdit.Password)
         # modo de funcionamento ("novo" ou "alterar")
         self.modo_funcionamento = None
 

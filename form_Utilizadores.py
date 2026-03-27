@@ -92,7 +92,7 @@ class formUtilizadores(QtWidgets.QMainWindow,Ui_MainWindow):
                     cmd_sql = "SELECT id, nome, email, admin FROM Utilizador ORDER BY nome ASC;"
                 dados = listagem_BD(conn_BD, cmd_sql)
                 modelo = QStandardItemModel()
-                modelo.setHorizontalHeaderLabels(["Id", "Nome", "Email", "Administrador (1=Sim, 0=Não)"])
+                modelo.setHorizontalHeaderLabels(["Id", "Nome", "Email", "Administrador"])
                 for linha in dados:
                     valores = [str(celula) if celula is not None else "" for celula in linha]
                     if len(valores) == 4:

@@ -45,6 +45,27 @@ class formPrincipal(QtWidgets.QMainWindow,Ui_MainWindow):
         self.pushButton_Entradas_de_Material.clicked.connect(self.mostrar_form_Entradas_de_Material)
         self.pushButton_Saidas_de_Material.clicked.connect(self.mostrar_form_Saidas_de_Material)
         
+        # Configurar a tabela para melhor visualização
+        self.configurar_tabela()
+        
+    def configurar_tabela(self):
+        """Configura a tabela para melhor visualização com scroll suave"""
+        # Configurações básicas da tabela
+        self.tableView.verticalHeader().setVisible(False)
+        self.tableView.setSelectionBehavior(QtWidgets.QTableView.SelectRows)
+        self.tableView.setSelectionMode(QtWidgets.QTableView.SingleSelection)
+        self.tableView.setEditTriggers(QtWidgets.QTableView.NoEditTriggers)
+        
+        # Melhorar o scroll horizontal e vertical
+        self.tableView.setHorizontalScrollMode(QtWidgets.QAbstractItemView.ScrollPerPixel)
+        self.tableView.setVerticalScrollMode(QtWidgets.QAbstractItemView.ScrollPerPixel)
+        
+        # Permitir que a última coluna se expanda
+        self.tableView.horizontalHeader().setStretchLastSection(True)
+        
+        # Definir larguras mínimas para melhor visualização
+        self.tableView.horizontalHeader().setMinimumSectionSize(50)
+        
     #Métodos
     def inicializar(self):
         conn_BD = ligacao_BD()
@@ -178,12 +199,29 @@ class formPrincipal(QtWidgets.QMainWindow,Ui_MainWindow):
                     modelo.appendRow([QStandardItem(str(celula) if celula is not None else "") for celula in linha])
                 self.tableView.setModel(modelo)
 
-                self.tableView.resizeColumnsToContents()
-                # Selecionar apenas linhas inteiras
+                # Configurar a tabela para melhor visualização
                 self.tableView.verticalHeader().setVisible(False)
                 self.tableView.setSelectionBehavior(QtWidgets.QTableView.SelectRows)
                 self.tableView.setSelectionMode(QtWidgets.QTableView.SingleSelection)
                 self.tableView.setEditTriggers(QtWidgets.QTableView.NoEditTriggers)
+                
+                # Ajustar automaticamente as colunas ao conteúdo
+                self.tableView.resizeColumnsToContents()
+                
+                # Definir larguras mínimas para colunas importantes
+                self.tableView.setColumnWidth(0, 60)  # ID - largura um pouco maior
+                self.tableView.setColumnWidth(1, 120) # Categoria - um pouco maior
+                self.tableView.setColumnWidth(2, 140) # Fornecedor - um pouco maior
+                self.tableView.setColumnWidth(4, 90)  # Preço - um pouco maior
+                self.tableView.setColumnWidth(5, 130) # Preço de Revenda - um pouco maior
+                self.tableView.setColumnWidth(6, 70)  # Stock - um pouco maior
+                
+                # Permitir que a coluna Designação se expanda
+                self.tableView.horizontalHeader().setStretchLastSection(True)
+                
+                # Melhorar o scroll horizontal
+                self.tableView.setHorizontalScrollMode(QtWidgets.QAbstractItemView.ScrollPerPixel)
+                self.tableView.setVerticalScrollMode(QtWidgets.QAbstractItemView.ScrollPerPixel)
         except Exception as e:
             QtWidgets.QMessageBox.critical(self,"Erro",f"Ocorreu um erro:{e}")
         
