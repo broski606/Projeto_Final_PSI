@@ -93,35 +93,40 @@ class formCriarAlterarProduto(QtWidgets.QMainWindow,Ui_MainWindow):
                 numRegistos = consultaUmValor(conn_BD, cmd_sql, (id, designacao,))
                 if numRegistos == -1:
                     QtWidgets.QMessageBox.critical(self,"Erro","Ocorreu um erro ao verificar a existência do produto")
+                    conn_BD.close()
                     return
                 elif numRegistos > 0:
                     QtWidgets.QMessageBox.critical(self,"Aviso", f"Já existe um produto com designação {designacao} ou com id {id} introduzidos")
+                    conn_BD.close()
                     return
                 
                 cmd_sql = "SELECT id FROM Categoria WHERE designacao = %s;"
                 idCategoria = consultaUmValor(conn_BD, cmd_sql, (categoria,))
                 if idCategoria == -1:
                     QtWidgets.QMessageBox.critical(self,"Erro","Ocorreu um erro ao obter o ID da categoria")
+                    conn_BD.close()
                     return
 
                 cmd_sql = "SELECT id FROM Fornecedor WHERE nome = %s;"
                 idFornecedor = consultaUmValor(conn_BD, cmd_sql, (fornecedor,))
-                if idCategoria == -1:
+                if idFornecedor == -1:
                     QtWidgets.QMessageBox.critical(self,"Erro","Ocorreu um erro ao obter o ID do fornecedor")
+                    conn_BD.close()
                     return
                 
                 cmd_sql = "INSERT INTO Produto (id, idCategoria, idFornecedor, designacao, preco, precoRevenda, stock, ativo) VALUES (%s, %s, %s, %s, %s, %s, %s, %s);"
                 numRegistos = operacao_DML(conn_BD, cmd_sql, (id, idCategoria, idFornecedor, designacao, preco, preco_revenda, stock, ativo))
                 if numRegistos == -1:
                     QtWidgets.QMessageBox.critical(self,"Erro","Ocorreu um erro ao inserir o registo")
+                    conn_BD.close()
                     return
+                conn_BD.close()
                 resposta = QtWidgets.QMessageBox.question(self, "Confirmação", "Produto inserido com sucesso!\n Pretende inserir dados de um novo produto?", QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
                 if resposta == QtWidgets.QMessageBox.Yes:
                     self.inicializar(selecao=None, modo_funcionamento="novo")
                     return
                 else:
                     self.voltar()
-                conn_BD.close()
             except Exception as e:
                 QtWidgets.QMessageBox.critical(self,"Erro",f"Erro: {e}")
                 return
@@ -183,9 +188,11 @@ class formCriarAlterarProduto(QtWidgets.QMainWindow,Ui_MainWindow):
                 numRegistosId = consultaUmValor(conn_BD, cmd_sql, (id,))
                 if numRegistosId == -1:
                     QtWidgets.QMessageBox.critical(self,"Erro","Ocorreu um erro ao verificar a existência do artigo")
+                    conn_BD.close()
                     return
                 elif numRegistosId==0:
                     QtWidgets.QMessageBox.critical(self,"Aviso", f"Não foi possível encontrar o produto com identificador {id}!")
+                    conn_BD.close()
                     return
                 idCategoria = consultaUmValor(conn_BD, "SELECT id FROM Categoria WHERE designacao = %s;", (categoria,))
                 idFornecedor = consultaUmValor(conn_BD, "SELECT id FROM Fornecedor WHERE nome = %s;", (fornecedor,))
@@ -242,8 +249,10 @@ class formCriarAlterarProduto(QtWidgets.QMainWindow,Ui_MainWindow):
                 proximo_id = consultaUmValor(conn_BD, cmd_sql)
                 if proximo_id == -1:
                     QtWidgets.QMessageBox.critical(self,"Erro","Ocorreu um erro ao obter o próximo id")
+                    conn_BD.close()
                     return
                 self.lineEdit_Id.setText(str(proximo_id))
+                conn_BD.close()
             except Exception as e:
                 QtWidgets.QMessageBox.critical(self,"Erro",f"Ocorreu um erro:{e}")
 
@@ -269,6 +278,7 @@ class formCriarAlterarProduto(QtWidgets.QMainWindow,Ui_MainWindow):
                     self.comboBox_Fornecedor.clear() # Limpa a QComboBox antes de preencher
                     fornecedores = [str(linha[0]) for linha in dados] #correção para o erro todo estranho da tupla que deu quando corri o código sem esta linha: index 0 has type 'tuple but 'str is expected
                     self.comboBox_Fornecedor.addItems(fornecedores) # Adiciona os itens ao QComboBox
+                conn_BD.close()
 
             except Exception as e:
                 QtWidgets.QMessageBox.critical(self,"Erro",f"Ocorreu um erro:{e}")

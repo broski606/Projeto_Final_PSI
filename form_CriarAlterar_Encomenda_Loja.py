@@ -2,6 +2,7 @@ from PyQt5 import QtWidgets
 from Interfaces.formCriarAlterarEncomendaLoja import Ui_MainWindow
 from PyQt5.QtGui import QStandardItemModel, QStandardItem
 from base_dados import ligacao_BD, listagem_BD, consultaUmValor, operacao_DML
+from funcoes_gerais import obter_fornecedor_produto
 from datetime import date
 
 class formCriarAlterarEncomendaLoja(QtWidgets.QMainWindow, Ui_MainWindow):
@@ -15,6 +16,10 @@ class formCriarAlterarEncomendaLoja(QtWidgets.QMainWindow, Ui_MainWindow):
 
         # Carrinho como lista de dicionários: {'idProduto': , 'designacao': , 'quantidade': , 'precoUnitario': }
         self.carrinho = []
+
+        # Fornecedor da encomenda (None até ao primeiro produto ser adicionado)
+        self.id_fornecedor_encomenda = None
+        self.nome_fornecedor_encomenda = None
 
         # Definição dos botões
         self.pushButton_Pesquisar.clicked.connect(self.limpar_filtros)
@@ -33,6 +38,8 @@ class formCriarAlterarEncomendaLoja(QtWidgets.QMainWindow, Ui_MainWindow):
         conn_BD = ligacao_BD()
         if modo_funcionamento == "novo":
             self.carrinho = []
+            self.id_fornecedor_encomenda = None
+            self.nome_fornecedor_encomenda = None
             self.atualizar_carrinho()
 
             if conn_BD and conn_BD != -1:
@@ -61,6 +68,14 @@ class formCriarAlterarEncomendaLoja(QtWidgets.QMainWindow, Ui_MainWindow):
                 self.nEncomenda_alterar = modelo.data(modelo.index(linha, 0))
 
                 if conn_BD and conn_BD != -1:
+                    # Obter fornecedor da encomenda
+                    cmd_sql = "SELECT idFornecedor FROM EncomendaLoja WHERE nEncomendaLoja = %s;"
+                    id_fornecedor = consultaUmValor(conn_BD, cmd_sql, (self.nEncomenda_alterar,))
+                    if id_fornecedor and id_fornecedor != -1:
+                        self.id_fornecedor_encomenda = id_fornecedor
+                        cmd_sql = "SELECT nome FROM Fornecedor WHERE id = %s;"
+                        self.nome_fornecedor_encomenda = consultaUmValor(conn_BD, cmd_sql, (id_fornecedor,))
+                    
                     # Preencher comboBox_CategoriaFiltro
                     cmd_sql = "SELECT designacao FROM Categoria WHERE ativo = 1 ORDER BY designacao ASC;"
                     dados = listagem_BD(conn_BD, cmd_sql)
@@ -149,20 +164,55 @@ class formCriarAlterarEncomendaLoja(QtWidgets.QMainWindow, Ui_MainWindow):
         designacao = modelo.data(modelo.index(linha, 1))
         preco = float(modelo.data(modelo.index(linha, 4)))
 
-        for item in self.carrinho:
-            if item['idProduto'] == id_produto:
-                item['quantidade'] += quantidade
-                break
-        else:
-            self.carrinho.append({
-                'idProduto': id_produto,
-                'designacao': designacao,
-                'quantidade': quantidade,
-                'precoUnitario': preco
-            })
+        # Obter fornecedor do produto
+        try:
+            conn_BD = ligacao_BD()
+            if conn_BD and conn_BD != -1:
+                id_fornecedor_produto = obter_fornecedor_produto(conn_BD, id_produto)
+                
+                if id_fornecedor_produto is None:
+                    QtWidgets.QMessageBox.critical(self, "Erro", "Não foi possível obter o fornecedor do produto.")
+                    return
+                
+                # Primeira vez adicionando ao carrinho
+                if self.id_fornecedor_encomenda is None:
+                    self.id_fornecedor_encomenda = id_fornecedor_produto
+                    cmd_sql = "SELECT nome FROM Fornecedor WHERE id = %s;"
+                    self.nome_fornecedor_encomenda = consultaUmValor(conn_BD, cmd_sql, (id_fornecedor_produto,))
+                
+                # Verificar se o fornecedor é o mesmo
+                if id_fornecedor_produto != self.id_fornecedor_encomenda:
+                    QtWidgets.QMessageBox.critical(
+                        self, 
+                        "Aviso", 
+                        f"Não é possível misturar produtos de diferentes fornecedores.\n\n"
+                        f"Fornecedor atual: {self.nome_fornecedor_encomenda}\n"
+                        f"Fornecedor do produto: {self.obter_nome_fornecedor(conn_BD, id_fornecedor_produto)}"
+                    )
+                    return
 
-        self.atualizar_carrinho()
-        self.lineEdit_Quantidade.clear()
+                for item in self.carrinho:
+                    if item['idProduto'] == id_produto:
+                        item['quantidade'] += quantidade
+                        break
+                else:
+                    self.carrinho.append({
+                        'idProduto': id_produto,
+                        'designacao': designacao,
+                        'quantidade': quantidade,
+                        'precoUnitario': preco
+                    })
+
+                self.atualizar_carrinho()
+                self.lineEdit_Quantidade.clear()
+        except Exception as e:
+            QtWidgets.QMessageBox.critical(self, "Erro", f"Ocorreu um erro: {e}")
+
+    def obter_nome_fornecedor(self, conn_BD, id_fornecedor):
+        """Auxilia a obter o nome do fornecedor pelo ID"""
+        cmd_sql = "SELECT nome FROM Fornecedor WHERE id = %s;"
+        nome = consultaUmValor(conn_BD, cmd_sql, (id_fornecedor,))
+        return nome if nome else "Desconhecido"
 
     def atualizar_carrinho(self):
         modelo = QStandardItemModel()
@@ -191,6 +241,12 @@ class formCriarAlterarEncomendaLoja(QtWidgets.QMainWindow, Ui_MainWindow):
 
         linha = selecao[0].row()
         del self.carrinho[linha]
+        
+        # Se o carrinho fica vazio, limpar o fornecedor
+        if not self.carrinho:
+            self.id_fornecedor_encomenda = None
+            self.nome_fornecedor_encomenda = None
+        
         self.atualizar_carrinho()
 
     def voltar(self):
@@ -221,10 +277,10 @@ class formCriarAlterarEncomendaLoja(QtWidgets.QMainWindow, Ui_MainWindow):
                         QtWidgets.QMessageBox.warning(self, "Aviso", "Selecione uma loja de destino.")
                         return
 
-                    # Inserir EncomendaLoja
+                    # Inserir EncomendaLoja com idFornecedor
                     data_encomenda = date.today()
-                    cmd_sql = "INSERT INTO EncomendaLoja (idUtilizador, idLoja, dataEncomenda, ativo) VALUES (%s, %s, %s, 1);"
-                    operacao_DML(conn_BD, cmd_sql, (id_utilizador, id_loja, data_encomenda))
+                    cmd_sql = "INSERT INTO EncomendaLoja (idUtilizador, idFornecedor, idLoja, dataEncomenda, ativo) VALUES (%s, %s, %s, %s, 1);"
+                    operacao_DML(conn_BD, cmd_sql, (id_utilizador, self.id_fornecedor_encomenda, id_loja, data_encomenda))
 
                     # Obter nEncomendaLoja
                     cmd_sql = "SELECT LAST_INSERT_ID();"
@@ -237,6 +293,8 @@ class formCriarAlterarEncomendaLoja(QtWidgets.QMainWindow, Ui_MainWindow):
 
                     QtWidgets.QMessageBox.information(self, "Sucesso", "Encomenda criada com sucesso!")
                     self.carrinho.clear()
+                    self.id_fornecedor_encomenda = None
+                    self.nome_fornecedor_encomenda = None
                     self.atualizar_carrinho()
                     self.voltar()
             except Exception as e:
@@ -260,12 +318,18 @@ class formCriarAlterarEncomendaLoja(QtWidgets.QMainWindow, Ui_MainWindow):
                     cmd_sql = "DELETE FROM DetalheEncomendaLoja WHERE nEncomendaLoja = %s;"
                     operacao_DML(conn_BD, cmd_sql, (self.nEncomenda_alterar,))
 
+                    # Atualizar idFornecedor na encomenda
+                    cmd_sql = "UPDATE EncomendaLoja SET idFornecedor = %s WHERE nEncomendaLoja = %s;"
+                    operacao_DML(conn_BD, cmd_sql, (self.id_fornecedor_encomenda, self.nEncomenda_alterar))
+
                     for item in self.carrinho:
                         cmd_sql = "INSERT INTO DetalheEncomendaLoja (nEncomendaLoja, idProduto, quantidade, precoUnitario) VALUES (%s, %s, %s, %s);"
                         operacao_DML(conn_BD, cmd_sql, (self.nEncomenda_alterar, item['idProduto'], item['quantidade'], item['precoUnitario']))
 
                     QtWidgets.QMessageBox.information(self, "Sucesso", "Encomenda alterada com sucesso!")
                     self.carrinho.clear()
+                    self.id_fornecedor_encomenda = None
+                    self.nome_fornecedor_encomenda = None
                     self.atualizar_carrinho()
                     self.voltar()
             except Exception as e:

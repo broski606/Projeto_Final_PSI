@@ -115,6 +115,17 @@ def validar_designacao(designacao):
     return True, ""
 
 
+def obter_fornecedor_produto(conn_BD, id_produto):
+    """
+    Obtém o ID do fornecedor de um produto.
+    Retorna: idFornecedor (int) ou None se não encontrado
+    """
+    from base_dados import consultaUmValor
+    cmd_sql = "SELECT idFornecedor FROM Produto WHERE id = %s;"
+    id_fornecedor = consultaUmValor(conn_BD, cmd_sql, (id_produto,))
+    return id_fornecedor if id_fornecedor and id_fornecedor != -1 else None
+
+
 def validar_campos_obrigatorios(campos_dict):
     """
     Valida múltiplos campos obrigatórios.
